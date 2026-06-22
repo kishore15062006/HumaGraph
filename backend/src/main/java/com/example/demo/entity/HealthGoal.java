@@ -14,5 +14,8 @@ public class HealthGoal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @ManyToOne
-    
+    private BiometricProfile profile;
+    @ManyToOne
+    private HealthMetric metric;
+    private double
 }
