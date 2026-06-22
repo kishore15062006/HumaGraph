@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Builder.Default;
 
 @Entity
 public class UserAccount {
@@ -17,7 +18,7 @@ public class UserAccount {
     private String email;
     private String passwordHash;
     private UserRole role;
-    @Column()
+    @Default()
     private boolean isActive;
-    private LocalDateTime createdAt
+    private LocalDateTime createdAt;
 }
