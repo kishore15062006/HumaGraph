@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
@@ -8,5 +10,8 @@ import jakarta.persistence.Table;
 public class BiometricProfile {
     private long id;
     private UserAccount userAccount;
-    
+    private String fullName;
+    private LocalDate dateOfBirth;
+    private String gender;
+    private String bloodType
 }
