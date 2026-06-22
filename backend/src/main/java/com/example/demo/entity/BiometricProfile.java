@@ -27,4 +27,46 @@ public class BiometricProfile {
     private LocalDate dateOfBirth;
     private String gender;
     private String bloodType;
+
+    public BiometricProfile(long id, UserAccount userAccount, String fullName, LocalDate dateOfBirth, String gender,
+            String bloodType) {
+        this.id = id;
+        this.userAccount = userAccount;
+        this.fullName = fullName;
+        this.dateOfBirth = dateOfBirth;
+        this.gender = gender;
+        this.bloodType = bloodType;
+    }
+    
+    public UserAccount getUserAccount() {
+        return userAccount;
+    }
+    public void setUserAccount(UserAccount userAccount) {
+        this.userAccount = userAccount;
+    }
+    public String getFullName() {
+        return fullName;
+    }
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+    public String getGender() {
+        return gender;
+    }
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+    public String getBloodType() {
+        return bloodType;
+    }
+    public void setBloodType(String bloodType) {
+        this.bloodType = bloodType;
+    }
+    
 }
