@@ -14,7 +14,7 @@ public class UserAccount {
     @Column(unique = true,nullable = false)
     private String email;
     private String passwordHash;
-    // private Role userRole;
-    // @Column()
-    // private boolean isActive;
+    private UserRole role;
+    @Column()
+    private boolean isActive;
 }
