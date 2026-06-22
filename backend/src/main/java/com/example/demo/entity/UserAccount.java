@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,7 +21,7 @@ public class UserAccount {
     private String email;
     @Column(nullable = false)
     private String passwordHash;
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private UserRole role;
     @Column(nullable = false)
     private boolean isActive=true;
