@@ -1,6 +1,10 @@
 package com.example.demo.entity;
 
-@Entity5
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name="health_goal")
 public class HealthGoal {
     
 }
