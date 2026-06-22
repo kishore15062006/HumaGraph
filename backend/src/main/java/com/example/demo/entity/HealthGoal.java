@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,5 +19,8 @@ public class HealthGoal {
     private BiometricProfile profile;
     @ManyToOne
     private HealthMetric metric;
-    private double
+    private double targetValue;
+    private double currentValue=0;
+    private LocalDate targetDate;
+    private Goa
 }
