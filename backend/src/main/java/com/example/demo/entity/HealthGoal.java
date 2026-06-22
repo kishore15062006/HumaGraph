@@ -22,5 +22,5 @@ public class HealthGoal {
     private double targetValue;
     private double currentValue=0;
     private LocalDate targetDate;
-    private Goa
+    private GoalStatus status;
 }
