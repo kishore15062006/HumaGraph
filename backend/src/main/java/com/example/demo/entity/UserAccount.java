@@ -22,6 +22,7 @@ public class UserAccount {
     @Column(nullable = false)
     private String passwordHash;
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private UserRole role;
     @Column(nullable = false)
     private boolean isActive=true;
