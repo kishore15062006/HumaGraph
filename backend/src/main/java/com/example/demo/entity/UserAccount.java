@@ -18,7 +18,7 @@ public class UserAccount {
     private String email;
     private String passwordHash;
     private UserRole role;
-    @Default()
-    private boolean isActive;
+    @Column(nullable = false)
+    private boolean isActive=true;
     private LocalDateTime createdAt;
 }
