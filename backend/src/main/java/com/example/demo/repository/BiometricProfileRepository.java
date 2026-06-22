@@ -1,5 +1,6 @@
 package com.example.demo.repository;
 
-public class BiometricProfileRepository {
+public interface BiometricProfileRepository {
+
     
 }
