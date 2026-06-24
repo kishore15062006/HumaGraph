@@ -10,6 +10,6 @@ import com.example.demo.entity.HealthReading;
 
 @Repository
 public interface HealthReadingRepositoy extends JpaRepository<HealthReading,Long>{
-    List<HealthReading,Long> findByProfileAndMetricIdOrderByRecordedAtDesc(Long profileId,Long metricId,LocalDateTime recordedAt);
-
+    List<HealthReading> findByProfileAndMetricIdOrderByRecordedAtDesc(Long profileId,Long metricId);
+    List<
 }
