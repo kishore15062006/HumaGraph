@@ -36,5 +36,51 @@ public class HealthReading {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ReadingStatus status;
+    public HealthReading(long id, BiometricProfile profile, HealthMetric metric, LocalDateTime recordedAt,
+            double numericValue, ReadingSource source, ReadingStatus status) {
+        this.id = id;
+        this.profile = profile;
+        this.metric = metric;
+        this.recordedAt = recordedAt;
+        this.numericValue = numericValue;
+        this.source = source;
+        this.status = status;
+    }
+    public BiometricProfile getProfile() {
+        return profile;
+    }
+    public void setProfile(BiometricProfile profile) {
+        this.profile = profile;
+    }
+    public HealthMetric getMetric() {
+        return metric;
+    }
+    public void setMetric(HealthMetric metric) {
+        this.metric = metric;
+    }
+    public LocalDateTime getRecordedAt() {
+        return recordedAt;
+    }
+    public void setRecordedAt(LocalDateTime recordedAt) {
+        this.recordedAt = recordedAt;
+    }
+    public double getNumericValue() {
+        return numericValue;
+    }
+    public void setNumericValue(double numericValue) {
+        this.numericValue = numericValue;
+    }
+    public ReadingSource getSource() {
+        return source;
+    }
+    public void setSource(ReadingSource source) {
+        this.source = source;
+    }
+    public ReadingStatus getStatus() {
+        return status;
+    }
+    public void setStatus(ReadingStatus status) {
+        this.status = status;
+    }
     
 }
