@@ -18,7 +18,11 @@ import jakarta.persistence.Table;
 @Table(name="health_goal")
 public class HealthGoal {
 
-    
+    public enum GoalStatus {
+        IN_PROGRESS,
+        ACHIEVED,
+        FAILED
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
