@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -17,5 +19,8 @@ public class HealthReading {
     @ManyToOne(fetch = FetchType.LAZY)
     private BiometricProfile profile;
     @ManyToOne(fetch = FetchType.LAZY)
-    
+    private HealthMetric metric;
+    private LocalDateTime recordedAt;
+    private double numericValue;
+    private ReadingSource 
 }
