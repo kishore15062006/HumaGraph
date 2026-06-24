@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.example.demo.entity.HealthReading;
 
 @Repository
-public interface HealthReadingRepositoy extends JpaRepository<HealthReading,Long>{
+public interface HealthReadingRepository extends JpaRepository<HealthReading,Long>{
     List<HealthReading> findByProfileIdAndMetricIdOrderByRecordedAtDesc(Long profileId,Long metricId);
     List<HealthReading> findByProfileIdAndStatus(Long profileId,HealthReading.ReadingStatus status);
     List<HealthReading> findByProfileIdOrderByRecordedAtDesc(Long profileId);
