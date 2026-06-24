@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,10 +22,12 @@ public class HealthGoal {
     private BiometricProfile profile;
     @ManyToOne
     private HealthMetric metric;
+    @Column(nullable = false)
     private double targetValue;
-    private double currentValue=0;
+    @Column(nullable = false)
+    private double currentValue=0.0;
     @Column(nullable = false)
     private LocalDate targetDate;
-    @Enumerated(e)
+    @Enumerated(EnumType.STRING)
     private GoalStatus status;
 }
