@@ -26,7 +26,7 @@ public class HealthMetricController {
 
     @PostMapping("/post")
     public HealthMetric addHealthMetric(@RequestBody HealthMetric healthMetric){
-        return healthMetricService.addHealthMetric();
+        return healthMetricService.addHealthMetric(healthMetric);
     }
 
 }
