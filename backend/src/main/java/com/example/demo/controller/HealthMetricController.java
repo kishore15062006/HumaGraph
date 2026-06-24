@@ -14,10 +14,10 @@ public class HealthMetricController {
     
     @Autowired
     private HealthMetricService healthMetricService;
-
+    @De
     @GetMapping("/get")
-    public List<HealthMetric> getHealthMetrics(){
-        return healthMetricService.getMetrics();
+    public List<HealthMetric> getAllMetrics(){
+        return healthMetricService.getAllMetrics();
     }
 
 }
