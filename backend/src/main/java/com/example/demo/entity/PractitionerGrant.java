@@ -32,5 +32,44 @@ public class PractitionerGrant {
     private LocalDateTime grantedAt;
     @Column(length = 1000)
     private String clinicalNote;
+    public PractitionerGrant(long id, UserAccount practitionerAccount, BiometricProfile patientProfile,
+            GrantStatus status, LocalDateTime grantedAt, String clinicalNote) {
+        this.id = id;
+        this.practitionerAccount = practitionerAccount;
+        this.patientProfile = patientProfile;
+        this.status = status;
+        this.grantedAt = grantedAt;
+        this.clinicalNote = clinicalNote;
+    }
+    public UserAccount getPractitionerAccount() {
+        return practitionerAccount;
+    }
+    public void setPractitionerAccount(UserAccount practitionerAccount) {
+        this.practitionerAccount = practitionerAccount;
+    }
+    public BiometricProfile getPatientProfile() {
+        return patientProfile;
+    }
+    public void setPatientProfile(BiometricProfile patientProfile) {
+        this.patientProfile = patientProfile;
+    }
+    public GrantStatus getStatus() {
+        return status;
+    }
+    public void setStatus(GrantStatus status) {
+        this.status = status;
+    }
+    public LocalDateTime getGrantedAt() {
+        return grantedAt;
+    }
+    public void setGrantedAt(LocalDateTime grantedAt) {
+        this.grantedAt = grantedAt;
+    }
+    public String getClinicalNote() {
+        return clinicalNote;
+    }
+    public void setClinicalNote(String clinicalNote) {
+        this.clinicalNote = clinicalNote;
+    }
     
 }
