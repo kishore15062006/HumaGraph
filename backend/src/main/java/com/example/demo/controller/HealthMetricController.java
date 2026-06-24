@@ -17,7 +17,7 @@ public class HealthMetricController {
 
     @GetMapping("/get")
     public List<HealthMetric> getHealthMetrics(){
-        return healthMetricService.getHealthMetrics();
+        return healthMetricService.getMetrics();
     }
 
 }

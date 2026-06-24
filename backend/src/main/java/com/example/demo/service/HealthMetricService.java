@@ -14,8 +14,8 @@ public class HealthMetricService {
     @Autowired
     private HealthMetricRepository healthMetricRepo;
 
-    public List<HealthMetric> getHealthMetrics(){
-
+    public List<HealthMetric> getAllMetrics(){
+        return healthMetricRepo.findAll();
     }
     
 }
