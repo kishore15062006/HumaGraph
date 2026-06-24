@@ -1,5 +1,6 @@
 package com.example.demo.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,5 +10,6 @@ import com.example.demo.entity.HealthReading;
 
 @Repository
 public interface HealthReadingRepositoy extends JpaRepository<HealthReading,Long>{
-    List<HealthReading,Long> findByProfileAndMetricIdOrderByRecordedAtDesc(Long profileId,Long metri)
+    List<HealthReading,Long> findByProfileAndMetricIdOrderByRecordedAtDesc(Long profileId,Long metricId,LocalDateTime recordedAt);
+
 }
