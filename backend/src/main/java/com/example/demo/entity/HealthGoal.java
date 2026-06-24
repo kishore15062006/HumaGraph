@@ -17,6 +17,9 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name="health_goal")
 public class HealthGoal {
+
+    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
