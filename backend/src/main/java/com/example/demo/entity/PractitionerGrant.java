@@ -17,6 +17,13 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name="practitioner_grant")
 public class PractitionerGrant {
+
+public enum GrantStatus {
+    REQUESTED,
+    ACTIVE,
+    REVOKED
+}
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

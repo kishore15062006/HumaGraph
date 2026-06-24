@@ -23,7 +23,11 @@ public class HealthReading {
         DEVICE
     }
 
-    
+    public enum ReadingStatus {
+        NORMAL,
+        OUT_OF_BOUNDS
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

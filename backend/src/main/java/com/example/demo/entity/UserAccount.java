@@ -14,6 +14,14 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name="user_account")
 public class UserAccount {
+
+    
+    public enum UserRole {
+        INDIVIDUAL,
+        PRACTITIONER,
+        ADMIN
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY )
     private long id;
