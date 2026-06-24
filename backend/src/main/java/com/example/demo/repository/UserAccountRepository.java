@@ -9,5 +9,5 @@ import com.example.demo.entity.UserAccount;
 
 @Repository
 public interface UserAccountRepository extends JpaRepository<UserAccount,Long> {
-    Optional<UserAccount> findByEmaiOptional9s
+    Optional<UserAccount> findByEmail(String email);
 }
