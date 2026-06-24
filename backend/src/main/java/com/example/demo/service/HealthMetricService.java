@@ -18,8 +18,8 @@ public class HealthMetricService {
         return healthMetricRepo.findAll();
     }
 
-    public HealthMetric addHealthMetric() {
-        return healthMetricRepo.save(H)
+    public HealthMetric addHealthMetric(HealthMetric healthMetric) {
+        return healthMetricRepo.save(healthMetric);
     }
     
 }
