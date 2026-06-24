@@ -18,11 +18,11 @@ import jakarta.persistence.Table;
 @Table(name="practitioner_grant")
 public class PractitionerGrant {
 
-public enum GrantStatus {
-    REQUESTED,
-    ACTIVE,
-    REVOKED
-}
+    public enum GrantStatus {
+        REQUESTED,
+        ACTIVE,
+        REVOKED
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
