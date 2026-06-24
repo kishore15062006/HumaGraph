@@ -22,5 +22,6 @@ public class HealthReading {
     private HealthMetric metric;
     private LocalDateTime recordedAt;
     private double numericValue;
-    private ReadingSource 
+    private ReadingSource source;
+    private ReadingStatus status;
 }

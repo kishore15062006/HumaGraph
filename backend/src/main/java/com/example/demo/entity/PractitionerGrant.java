@@ -32,4 +32,5 @@ public class PractitionerGrant {
     private LocalDateTime grantedAt;
     @Column(length = 1000)
     private String clinicalNote;
+    
 }
