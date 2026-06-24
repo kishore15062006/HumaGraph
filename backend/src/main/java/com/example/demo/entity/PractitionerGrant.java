@@ -6,6 +6,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,10 +20,11 @@ public class PractitionerGrant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @ManyToOne
-    @JoinColumn(name = "practitioner_account_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "practitioner_account_id",nullable = false)
     private UserAccount practitionerAccount;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "patient_profile_id",nullable = false)
     private BiometricProfile patientProfile;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
