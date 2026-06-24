@@ -11,5 +11,5 @@ import com.example.demo.entity.HealthGoal;
 public interface HealthGoalRepository extends JpaRepository<HealthGoal,Long> {
     List<HealthGoal> findByProfileIdAndStatus(Long profileId,HealthGoal.GoalStatus status);
     List<HealthGoal> findByProfileId(Long profileId);
-    List<HealthGoal> 
+    List<HealthGoal> findByProfileIdAndMetricIdAndStatus(Long profileId,Long metricId,HealthGoal.GoalStatus status);
 }

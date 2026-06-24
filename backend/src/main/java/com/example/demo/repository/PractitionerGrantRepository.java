@@ -1,5 +1,9 @@
 package com.example.demo.repository;
 
-public interface PractitionerGrantRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface PractitionerGrantRepository extends JpaRepository<{
     
 }
