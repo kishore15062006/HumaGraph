@@ -17,6 +17,13 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name ="health_reading")
 public class HealthReading {
+
+    public enum ReadingSource {
+        MANUAL,
+        DEVICE
+    }
+
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

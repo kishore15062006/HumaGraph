@@ -12,6 +12,14 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name="health_metric")
 public class HealthMetric {
+
+    public enum MetricCategory {
+        CARDIO,
+        METABOLIC,
+        FITNESS,
+        SLEEP
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
