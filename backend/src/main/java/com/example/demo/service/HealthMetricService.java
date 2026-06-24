@@ -17,5 +17,9 @@ public class HealthMetricService {
     public List<HealthMetric> getAllMetrics(){
         return healthMetricRepo.findAll();
     }
+
+    public HealthMetric addHealthMetric() {
+        return healthMetricRepo.save(H)
+    }
     
 }
