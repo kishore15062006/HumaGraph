@@ -1,5 +1,8 @@
 package com.example.demo.entity;
 
+import java.time.LocalDateTime;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,4 +21,7 @@ public class PractitionerGrant {
     @ManyToOne
     private BiometricProfile patientProfile;
     private GrantStatus status;
+    private LocalDateTime grantedAt;
+    @Column(length = 1000)
+    private String clinicalNote;
 }
