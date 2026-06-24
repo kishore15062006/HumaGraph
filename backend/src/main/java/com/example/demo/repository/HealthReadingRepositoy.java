@@ -11,5 +11,5 @@ import com.example.demo.entity.HealthReading;
 @Repository
 public interface HealthReadingRepositoy extends JpaRepository<HealthReading,Long>{
     List<HealthReading> findByProfileAndMetricIdOrderByRecordedAtDesc(Long profileId,Long metricId);
-    List<
+    List<HealthReading> findByProfile
 }
