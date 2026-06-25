@@ -19,6 +19,11 @@ public class HealthReadingService {
         throw new UnsupportedOperationException("Unimplemented method 'getReadings'");
     }
 
+    public ReadingResponseDto addReadings(ReadingResponseDto readingResponse) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'addReadings'");
+    }
+
 
 
 }
