@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.nio.file.attribute.UserPrincipal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ public class HealthGoalController {
     private HealthGoalService goalService;
 
     @GetMapping
-    public ResponseEntity<List<GoalResponseDto>> getGoals(@Auth)
+    public ResponseEntity<List<GoalResponseDto>> getGoals(@AuthenticationPrincipal UserPrincipal user){
+
+        
+    }
     
 }
