@@ -19,12 +19,12 @@ public class HealthGoalController {
     @Autowired
     private HealthGoalService goalService;
 
-    @GetMapping
-    public ResponseEntity<List<GoalResponseDto>> getGoals(@AuthenticationPrincipal UserPrincipal user){
+    // @GetMapping
+    // public ResponseEntity<List<GoalResponseDto>> getGoals(@AuthenticationPrincipal UserPrincipal user){
 
-        List<GoalResponseDto> goals=goalService.getGoalsByUser(user.getGoals());
+    //     List<GoalResponseDto> goals=goalService.getGoalsByUser(user.getId());
 
-        return ResponseEntity.ok(goals);
-    }
+    //     return ResponseEntity.ok(goals);
+    // }
     
 }

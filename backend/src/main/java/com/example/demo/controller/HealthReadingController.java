@@ -26,62 +26,62 @@ public class HealthReadingController {
         @Autowired
         private HealthReadingService readingService;
 
-        @GetMapping
-        public ResponseEntity<List<ReadingResponseDto>> getMyReadings(@AuthenticationPrincipal UserPrincipal user) {
+        // @GetMapping
+        // public ResponseEntity<List<ReadingResponseDto>> getMyReadings(@AuthenticationPrincipal UserPrincipal user) {
 
-                List<ReadingResponseDto> readings = readingService.getReadingsByUser(user.getId());
+        //         List<ReadingResponseDto> readings = readingService.getReadingsByUser(user.getId());
 
-                return ResponseEntity.ok(readings);
-        }
+        //         return ResponseEntity.ok(readings);
+        // }
 
-        @PostMapping
-        public ResponseEntity<ReadingResponseDto> createReading(
-                        @AuthenticationPrincipal UserPrincipal user,
-                        @RequestBody ReadingRequestDto requestDto) {
+        // @PostMapping
+        // public ResponseEntity<ReadingResponseDto> createReading(
+        //                 @AuthenticationPrincipal UserPrincipal user,
+        //                 @RequestBody ReadingRequestDto requestDto) {
 
-                ReadingResponseDto response = readingService.createReading(user.getId(), requestDto);
+        //         ReadingResponseDto response = readingService.createReading(user.getId(), requestDto);
 
-                return ResponseEntity.ok(response);
-        }
+        //         return ResponseEntity.ok(response);
+        // }
 
-        @GetMapping("/summary")
-        public ResponseEntity<List<DailySummaryDto>> getWeeklySummary(
-                        @AuthenticationPrincipal UserPrincipal user) {
+        // @GetMapping("/summary")
+        // public ResponseEntity<List<DailySummaryDto>> getWeeklySummary(
+        //                 @AuthenticationPrincipal UserPrincipal user) {
 
-                List<DailySummaryDto> summary = readingService.getSevenDayHeartRateSummary(user.getId());
+        //         List<DailySummaryDto> summary = readingService.getSevenDayHeartRateSummary(user.getId());
 
-                return ResponseEntity.ok(summary);
-        }
+        //         return ResponseEntity.ok(summary);
+        // }
 
-        @GetMapping("/patient/{profileId}")
-        public ResponseEntity<List<ReadingResponseDto>> getPatientReadings(
-                        @AuthenticationPrincipal UserPrincipal user,
-                        @PathVariable Long profileId) {
+        // @GetMapping("/patient/{profileId}")
+        // public ResponseEntity<List<ReadingResponseDto>> getPatientReadings(
+        //                 @AuthenticationPrincipal UserPrincipal user,
+        //                 @PathVariable Long profileId) {
 
-                List<ReadingResponseDto> readings = readingService.getPatientReadings(user.getId(), profileId);
+        //         List<ReadingResponseDto> readings = readingService.getPatientReadings(user.getId(), profileId);
 
-                return ResponseEntity.ok(readings);
-        }
+        //         return ResponseEntity.ok(readings);
+        // }
 
-        @PutMapping("/{id}")
-        public ResponseEntity<ReadingResponseDto> updateReading(
-                        @AuthenticationPrincipal UserPrincipal user,
-                        @PathVariable Long id,
-                        @RequestBody ReadingRequestDto requestDto) {
+        // @PutMapping("/{id}")
+        // public ResponseEntity<ReadingResponseDto> updateReading(
+        //                 @AuthenticationPrincipal UserPrincipal user,
+        //                 @PathVariable Long id,
+        //                 @RequestBody ReadingRequestDto requestDto) {
 
-                ReadingResponseDto updated = readingService.updateReading(user.getId(), id, requestDto);
+        //         ReadingResponseDto updated = readingService.updateReading(user.getId(), id, requestDto);
 
-                return ResponseEntity.ok(updated);
-        }
+        //         return ResponseEntity.ok(updated);
+        // }
 
-        @DeleteMapping("/{id}")
-        public ResponseEntity<Void> deleteReading(
-                        @AuthenticationPrincipal UserPrincipal user,
-                        @PathVariable Long id) {
+        // @DeleteMapping("/{id}")
+        // public ResponseEntity<Void> deleteReading(
+        //                 @AuthenticationPrincipal UserPrincipal user,
+        //                 @PathVariable Long id) {
 
-                readingService.deleteReading(user.getId(), id);
+        //         readingService.deleteReading(user.getId(), id);
 
-                return ResponseEntity.ok().build();
-        }
+        //         return ResponseEntity.ok().build();
+        // }
 
 }
