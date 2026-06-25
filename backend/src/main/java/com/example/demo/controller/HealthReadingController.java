@@ -20,93 +20,68 @@ import com.example.demo.dto.ReadingResponseDto;
 import com.example.demo.service.HealthReadingService;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/readings")
 public class HealthReadingController {
-    
-    @Autowired
-    private HealthReadingService readingService;
 
-    @GetMapping("/readings")
-    public ResponseEntity<List<ReadingResponseDto>> getMyReadings() {
+        @Autowired
+        private HealthReadingService readingService;
 
-        List<ReadingResponseDto> readings =
-                readingService.getReadingsByUser(user.getId());
+        @GetMapping
+        public ResponseEntity<List<ReadingResponseDto>> getMyReadings() {
 
-        return ResponseEntity.ok(readings);
-    }
+                List<ReadingResponseDto> readings = readingService.getReadingsByUser(user.getId());
 
-    /**
-     * POST /api/readings
-     * Log a new reading.
-     */
-    @PostMapping
-    public ResponseEntity<ReadingResponseDto> createReading(
-            @AuthenticationPrincipal UserPrincipal user,
-            @RequestBody ReadingRequestDto requestDto) {
+                return ResponseEntity.ok(readings);
+        }
 
-        ReadingResponseDto response =
-                readingService.createReading(user.getId(), requestDto);
+        @PostMapping
+        public ResponseEntity<ReadingResponseDto> createReading(
+                        @AuthenticationPrincipal UserPrincipal user,
+                        @RequestBody ReadingRequestDto requestDto) {
 
-        return ResponseEntity.ok(response);
-    }
+                ReadingResponseDto response = readingService.createReading(user.getId(), requestDto);
 
-    /**
-     * GET /api/readings/summary
-     * Returns 7-day heart rate summary.
-     */
-    @GetMapping("/summary")
-    public ResponseEntity<List<DailySummaryDto>> getWeeklySummary(
-            @AuthenticationPrincipal UserPrincipal user) {
+                return ResponseEntity.ok(response);
+        }
 
-        List<DailySummaryDto> summary =
-                readingService.getSevenDayHeartRateSummary(user.getId());
+        @GetMapping("/summary")
+        public ResponseEntity<List<DailySummaryDto>> getWeeklySummary(
+                        @AuthenticationPrincipal UserPrincipal user) {
 
-        return ResponseEntity.ok(summary);
-    }
+                List<DailySummaryDto> summary = readingService.getSevenDayHeartRateSummary(user.getId());
 
-    /**
-     * GET /api/readings/patient/{profileId}
-     * Practitioner access only.
-     */
-    @GetMapping("/patient/{profileId}")
-    public ResponseEntity<List<ReadingResponseDto>> getPatientReadings(
-            @AuthenticationPrincipal UserPrincipal user,
-            @PathVariable Long profileId) {
+                return ResponseEntity.ok(summary);
+        }
 
-        List<ReadingResponseDto> readings =
-                readingService.getPatientReadings(user.getId(), profileId);
+        @GetMapping("/patient/{profileId}")
+        public ResponseEntity<List<ReadingResponseDto>> getPatientReadings(
+                        @AuthenticationPrincipal UserPrincipal user,
+                        @PathVariable Long profileId) {
 
-        return ResponseEntity.ok(readings);
-    }
+                List<ReadingResponseDto> readings = readingService.getPatientReadings(user.getId(), profileId);
 
-    /**
-     * PUT /api/readings/{id}
-     * Update an existing reading.
-     */
-    @PutMapping("/{id}")
-    public ResponseEntity<ReadingResponseDto> updateReading(
-            @AuthenticationPrincipal UserPrincipal user,
-            @PathVariable Long id,
-            @RequestBody ReadingRequestDto requestDto) {
+                return ResponseEntity.ok(readings);
+        }
 
-        ReadingResponseDto updated =
-                readingService.updateReading(user.getId(), id, requestDto);
+        @PutMapping("/{id}")
+        public ResponseEntity<ReadingResponseDto> updateReading(
+                        @AuthenticationPrincipal UserPrincipal user,
+                        @PathVariable Long id,
+                        @RequestBody ReadingRequestDto requestDto) {
 
-        return ResponseEntity.ok(updated);
-    }
+                ReadingResponseDto updated = readingService.updateReading(user.getId(), id, requestDto);
 
-    /**
-     * DELETE /api/readings/{id}
-     * Delete a reading.
-     */
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteReading(
-            @AuthenticationPrincipal UserPrincipal user,
-            @PathVariable Long id) {
+                return ResponseEntity.ok(updated);
+        }
 
-        readingService.deleteReading(user.getId(), id);
+        @DeleteMapping("/{id}")
+        public ResponseEntity<Void> deleteReading(
+                        @AuthenticationPrincipal UserPrincipal user,
+                        @PathVariable Long id) {
 
-        return ResponseEntity.ok().build();
-    }
+                readingService.deleteReading(user.getId(), id);
+
+                return ResponseEntity.ok().build();
+        }
 
 }
