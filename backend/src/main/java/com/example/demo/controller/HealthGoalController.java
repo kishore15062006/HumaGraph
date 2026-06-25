@@ -16,8 +16,8 @@ import com.example.demo.service.HealthGoalService;
 @RequestMapping("/api/goals")
 public class HealthGoalController {
 
-    @Autowired
-    private HealthGoalService goalService;
+    // @Autowired
+    // private HealthGoalService goalService;
 
     // @GetMapping
     // public ResponseEntity<List<GoalResponseDto>> getGoals(@AuthenticationPrincipal UserPrincipal user){
