@@ -17,18 +17,21 @@ import com.example.demo.entity.BiometricProfile;
 import com.example.demo.entity.HealthMetric;
 import com.example.demo.entity.HealthReading.ReadingStatus;
 import com.example.demo.exception.BusinessValidationException;
+import com.example.demo.repository.BiometricProfileRepository;
 import com.example.demo.repository.HealthReadingRepository;
 
 @Service
 public class HealthReadingService {
     
     @Autowired
-    private HealthReadingRepositoryReadingRepo;
+    private HealthReadingRepository readingRepo;
+    private BiometricProfileRepository profileRepo;
+    private Pract
 
     @Transactional
     public List<ReadingResponseDto> getReadingsByUser(Long userId) {
 
-        BiometricProfile profile = profileRepository
+        BiometricProfile profile = profileRepo
                 .findByUserAccountId(userId)
                 .orElseThrow(() ->
                         new BusinessValidationException("Profile not found"));
@@ -39,7 +42,7 @@ public class HealthReadingService {
     @Transactional
     public List<ReadingResponseDto> getReadingsByProfileId(Long profileId) {
 
-        return readingRepository
+        return readingRepo
                 .findByProfileIdOrderByRecordedAtDesc(profileId)
                 .stream()
                 .map(this::mapToDto)
