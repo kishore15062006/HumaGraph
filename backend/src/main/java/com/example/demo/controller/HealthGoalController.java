@@ -16,15 +16,15 @@ import com.example.demo.service.HealthGoalService;
 @RequestMapping("/api/goals")
 public class HealthGoalController {
 
-    // @Autowired
-    // private HealthGoalService goalService;
+    @Autowired
+    private HealthGoalService goalService;
 
-    // @GetMapping
-    // public ResponseEntity<List<GoalResponseDto>> getGoals(@AuthenticationPrincipal UserPrincipal user){
+    @GetMapping
+    public ResponseEntity<List<GoalResponseDto>> getGoals(@AuthenticationPrincipal UserPrincipal user){
 
-    //     List<GoalResponseDto> goals=goalService.getGoalsByUser(user.getId());
+        List<GoalResponseDto> goals=goalService.getGoalsByUser(user.getId());
 
-    //     return ResponseEntity.ok(goals);
-    // }
+        return ResponseEntity.ok(goals);
+    }
     
 }
