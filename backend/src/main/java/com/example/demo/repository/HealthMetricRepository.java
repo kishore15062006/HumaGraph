@@ -11,5 +11,4 @@ import com.example.demo.entity.HealthMetric;
 @Repository
 public interface HealthMetricRepository extends JpaRepository<HealthMetric,Long>{
     Optional<HealthMetric> findByName(String name);
-    ResponseEntity<?> findAll()
 }
