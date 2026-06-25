@@ -15,10 +15,12 @@ import com.example.demo.dto.ReadingRequestDto;
 import com.example.demo.dto.ReadingResponseDto;
 import com.example.demo.entity.BiometricProfile;
 import com.example.demo.entity.HealthMetric;
+import com.example.demo.entity.PractitionerGrant;
 import com.example.demo.entity.HealthReading.ReadingStatus;
 import com.example.demo.exception.BusinessValidationException;
 import com.example.demo.repository.BiometricProfileRepository;
 import com.example.demo.repository.HealthReadingRepository;
+import com.example.demo.repository.PractitionerGrantRepository;
 
 @Service
 public class HealthReadingService {
@@ -26,7 +28,7 @@ public class HealthReadingService {
     @Autowired
     private HealthReadingRepository readingRepo;
     private BiometricProfileRepository profileRepo;
-    private Pract
+    private PractitionerGrantRepository grantRepo;
 
     @Transactional
     public List<ReadingResponseDto> getReadingsByUser(Long userId) {
@@ -54,7 +56,7 @@ public class HealthReadingService {
             Long practitionerId,
             Long patientProfileId) {
 
-        CareGrant grant = careGrantRepository
+        PractitionerGrant grant = grantRepo
                 .findByPractitionerAccountIdAndPatientProfileId(
                         practitionerId,
                         patientProfileId)
@@ -62,7 +64,7 @@ public class HealthReadingService {
                         new BusinessValidationException(
                                 "No active care grant found"));
 
-        if (grant.getStatus() != CareGrantStatus.ACTIVE) {
+        if (grant.getStatus() !=.ACTIVE) {
             throw new BusinessValidationException(
                     "Care grant is not ACTIVE");
         }
