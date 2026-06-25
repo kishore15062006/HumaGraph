@@ -47,6 +47,9 @@ public class HealthReading {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ReadingStatus status;
+
+    public HealthReading(){}
+
     public HealthReading(long id, BiometricProfile profile, HealthMetric metric, LocalDateTime recordedAt,
             double numericValue, ReadingSource source, ReadingStatus status) {
         this.id = id;

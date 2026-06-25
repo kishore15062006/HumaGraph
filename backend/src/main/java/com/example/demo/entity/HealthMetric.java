@@ -32,6 +32,8 @@ public class HealthMetric {
     private MetricCategory category;
     @Column(nullable = false)
     private boolean isSystemStandard=true;
+
+    public HealthMetric(){};
     
     public HealthMetric(long id, String name, String unit, MetricCategory category, boolean isSystemStandard) {
         this.id = id;
@@ -71,10 +73,6 @@ public class HealthMetric {
 
     public void setSystemStandard(boolean isSystemStandard) {
         this.isSystemStandard = isSystemStandard;
-    }
-
-    public HealthMetric(){
-
     }
     
 }

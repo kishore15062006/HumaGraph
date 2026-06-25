@@ -42,6 +42,8 @@ public class HealthGoal {
     @Enumerated(EnumType.STRING)
     private GoalStatus status;
 
+    public HealthGoal(){};
+
     public HealthGoal(long id, BiometricProfile profile, HealthMetric metric, double targetValue, double currentValue,
             LocalDate targetDate, GoalStatus status) {
         this.id = id;
