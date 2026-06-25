@@ -64,7 +64,7 @@ public class HealthReadingService {
                         new BusinessValidationException(
                                 "No active care grant found"));
 
-        if (grant.getStatus() !=.ACTIVE) {
+        if (grant.getStatus() !=PractitionerGrant.ACTIVE) {
             throw new BusinessValidationException(
                     "Care grant is not ACTIVE");
         }
@@ -77,7 +77,7 @@ public class HealthReadingService {
             Long userId,
             ReadingRequestDto dto) {
 
-        BiometricProfile profile = profileRepository
+        BiometricProfile profile = profileRepo
                 .findByUserAccountId(userId)
                 .orElseThrow(() ->
                         new BusinessValidationException(
