@@ -40,8 +40,8 @@ public class PractitionerGrant {
     @Column(length = 1000)
     private String clinicalNote;
 
+    public PractitionerGrant(){};
 
-    
     public PractitionerGrant(long id, UserAccount practitionerAccount, BiometricProfile patientProfile,
             GrantStatus status, LocalDateTime grantedAt, String clinicalNote) {
         this.id = id;

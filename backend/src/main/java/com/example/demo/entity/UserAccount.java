@@ -36,6 +36,8 @@ public class UserAccount {
     private boolean isActive=true;
     private LocalDateTime createdAt;
 
+    public UserAccount(){}
+
     public UserAccount(long id, String email, String passwordHash, UserRole role, boolean isActive,
             LocalDateTime createdAt) {
         this.id = id;
