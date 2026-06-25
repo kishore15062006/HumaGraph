@@ -24,6 +24,7 @@ public class HealthReadingController {
         return healthReadingService.getReadings();
     }
 
-    @PostMapping()
+    @PostMapping("/readings")
+    public ReadingResponseDto addReadings(@Re)
 
 }
