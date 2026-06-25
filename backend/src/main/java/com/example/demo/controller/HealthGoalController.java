@@ -22,7 +22,9 @@ public class HealthGoalController {
     @GetMapping
     public ResponseEntity<List<GoalResponseDto>> getGoals(@AuthenticationPrincipal UserPrincipal user){
 
-        
+        List<GoalResponseDto> goals=goalService.getGoalsByUser(user.getGoals());
+
+        return ResponseEntity.ok(goals);
     }
     
 }
