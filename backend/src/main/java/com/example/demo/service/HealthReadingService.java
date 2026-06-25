@@ -28,5 +28,4 @@ public class HealthReadingService {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'deleteReading'");
     }
-
 }
