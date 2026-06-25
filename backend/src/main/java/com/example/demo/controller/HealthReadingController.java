@@ -27,7 +27,7 @@ public class HealthReadingController {
         private HealthReadingService readingService;
 
         @GetMapping
-        public ResponseEntity<List<ReadingResponseDto>> getMyReadings() {
+        public ResponseEntity<List<ReadingResponseDto>> getMyReadings(@AuthenticationPrincipal UserPrincipal user) {
 
                 List<ReadingResponseDto> readings = readingService.getReadingsByUser(user.getId());
 
