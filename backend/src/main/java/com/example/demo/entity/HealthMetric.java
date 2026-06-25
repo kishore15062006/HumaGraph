@@ -22,7 +22,7 @@ public class HealthMetric {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     @Column(unique = true,nullable = false)
     private String name;
     @Column(nullable = false)
@@ -33,7 +33,7 @@ public class HealthMetric {
     @Column(nullable = false)
     private boolean isSystemStandard=true;
     
-    public HealthMetric(long id, String name, String unit, MetricCategory category, boolean isSystemStandard) {
+    public HealthMetric(Long id, String name, String unit, MetricCategory category, boolean isSystemStandard) {
         this.id = id;
         this.name = name;
         this.unit = unit;
