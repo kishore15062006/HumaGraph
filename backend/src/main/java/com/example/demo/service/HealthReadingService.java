@@ -11,4 +11,6 @@ public class HealthReadingService {
     @Autowired
     private HealthReadingRepository healthReadingRepo;
 
+    
+
 }
