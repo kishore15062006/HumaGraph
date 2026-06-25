@@ -33,7 +33,7 @@ public class HealthReadingController {
 
     @DeleteMapping("/readings{id}")
     public void deleteReading(@PathVariable long id){
-        return healthReadingService.deleteReading();
+        healthReadingService.deleteReading();
     }
 
 }
