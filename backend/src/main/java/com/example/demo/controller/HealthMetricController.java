@@ -19,7 +19,7 @@ public class HealthMetricController {
     
 
 
-    @GetMapping("/a")
+    @GetMapping("/get")
     public List<HealthMetric> getAllMetrics(){
         return healthMetricService.getAllMetrics();
     }
