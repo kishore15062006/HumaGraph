@@ -18,8 +18,6 @@ public class HealthMetricController {
     @Autowired
     private HealthMetricService healthMetricService;
     
-
-
     @GetMapping
     public ResponseEntity<List<HealthMetric>> getAllMetrics(){
         List<HealthMetric> metrics=healthMetricService.getAllMetrics();

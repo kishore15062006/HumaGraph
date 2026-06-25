@@ -27,7 +27,7 @@ public class BiometricProfile {
     private LocalDate dateOfBirth;
     private String gender;
     private String bloodType;
-
+    public BiometricProfile(){}
     public BiometricProfile(long id, UserAccount userAccount, String fullName, LocalDate dateOfBirth, String gender,
             String bloodType) {
         this.id = id;
