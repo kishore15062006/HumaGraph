@@ -1,99 +1,108 @@
 package com.example.demo.service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
-
 import org.springframework.stereotype.Service;
 
 import com.example.demo.config.JwtService;
 import com.example.demo.dto.AuthRequestDto;
 import com.example.demo.dto.AuthResponseDto;
 import com.example.demo.dto.RegisterDto;
-
 import com.example.demo.entity.BiometricProfile;
 import com.example.demo.entity.UserAccount;
-
 import com.example.demo.repository.BiometricProfileRepository;
 import com.example.demo.repository.UserAccountRepository;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
 public class AuthService {
 
-    private final UserAccountRepository userRepository;
-
-    private final BiometricProfileRepository biometricRepository;
-
+    private final UserAccountRepository userAccountRepository;
+    private final BiometricProfileRepository biometricProfileRepository;
     private final PasswordEncoder passwordEncoder;
-
     private final AuthenticationManager authenticationManager;
-
     private final JwtService jwtService;
 
-    public AuthResponseDto register(RegisterDto request) {
+    public AuthService(
+            UserAccountRepository userAccountRepository,
+            BiometricProfileRepository biometricProfileRepository,
+            PasswordEncoder passwordEncoder,
+            AuthenticationManager authenticationManager,
+            JwtService jwtService) {
 
-        if (userRepository.existsByEmail(request.getEmail())) {
+        this.userAccountRepository = userAccountRepository;
+        this.biometricProfileRepository = biometricProfileRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
+    }
 
+    public AuthResponseDto register(RegisterDto dto) {
+
+        if (userAccountRepository.existsByEmail(dto.getEmail())) {
             throw new RuntimeException("Email already exists");
-
         }
 
-        UserAccount user = UserAccount.builder()
+        UserAccount user = new UserAccount();
 
-                .email(request.getEmail())
+        user.setEmail(dto.getEmail());
 
-                .password(
-                        passwordEncoder.encode(request.getPassword()))
+        user.setPasswordHash(
+                passwordEncoder.encode(dto.getPassword()));
 
-                .role(UserAccount.UserRole.INDIVIDUAL)
+        user.setRole(UserAccount.UserRole.INDIVIDUAL);
 
-                .build();
+        user.setActive(true);
 
-        userRepository.save(user);
+        user.setCreatedAt(LocalDateTime.now());
+
+        user = userAccountRepository.save(user);
 
         BiometricProfile profile = new BiometricProfile();
 
-        profile.setUser(user);
+        profile.setUserAccount(user);
 
-        profile.setFullName(request.getFullName());
+        profile.setFullName(dto.getFullName());
 
-        profile.setDateOfBirth(request.getDateOfBirth());
+        profile.setDateOfBirth(dto.getDateOfBirth());
 
-        biometricRepository.save(profile);
+        profile.setGender(dto.getGender());
+
+        profile.setBloodType(dto.getBloodType());
+
+        biometricProfileRepository.save(profile);
 
         String token = jwtService.generateToken(user);
 
         return new AuthResponseDto(
                 token,
                 user.getEmail(),
-                user.getRole().name()
-        );
-
+                user.getRole().name());
     }
 
-    public AuthResponseDto login(AuthRequestDto request) {
+    public AuthResponseDto login(AuthRequestDto dto) {
 
         authenticationManager.authenticate(
 
                 new UsernamePasswordAuthenticationToken(
 
-                        request.getEmail(),
+                        dto.getEmail(),
 
-                        request.getPassword()
+                        dto.getPassword()
 
                 )
 
         );
 
-        UserAccount user = userRepository
-                .findByEmail(request.getEmail())
-                .orElseThrow();
+        UserAccount user = userAccountRepository
+
+                .findByEmail(dto.getEmail())
+
+                .orElseThrow(() ->
+
+                        new RuntimeException("Invalid email or password"));
 
         String token = jwtService.generateToken(user);
 
@@ -103,9 +112,7 @@ public class AuthService {
 
                 user.getEmail(),
 
-                user.getRole().name()
-
-        );
+                user.getRole().name());
 
     }
 
