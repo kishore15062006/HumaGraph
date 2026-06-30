@@ -1,6 +1,11 @@
 package com.example.demo.entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,7 +18,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name="user_account")
-public class UserAccount implements  {
+public class UserAccount implements UserDetails {
 
     
     public enum UserRole {
@@ -35,6 +40,16 @@ public class UserAccount implements  {
     @Column(nullable = false)
     private boolean isActive=true;
     private LocalDateTime createdAt;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+
+        return List.of(
+                new SimpleGrantedAuthority(
+                        "ROLE_" + role.name()
+                )
+        );
+    }
 
     public UserAccount(){}
 
