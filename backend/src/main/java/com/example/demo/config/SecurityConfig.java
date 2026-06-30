@@ -1,13 +1,12 @@
 package com.example.demo.config;
 
-import lombok.RequiredArgsConstructor;
-
 import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import org.springframework.security.authentication.AuthenticationManager;
+
 import org.springframework.security.config.Customizer;
 
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -27,41 +26,28 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 import org.springframework.web.cors.CorsConfiguration;
+
 import org.springframework.web.cors.CorsConfigurationSource;
+
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtFilter;
 
-    @Bean
-    CorsConfigurationSource corsConfigurationSource() {
+    public SecurityConfig(JwtAuthenticationFilter jwtFilter) {
 
-        CorsConfiguration configuration = new CorsConfiguration();
-
-        configuration.setAllowedOrigins(List.of("*"));
-
-        configuration.setAllowedMethods(List.of("*"));
-
-        configuration.setAllowedHeaders(List.of("*"));
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-
-        source.registerCorsConfiguration("/**",
-                configuration);
-
-        return source;
+        this.jwtFilter = jwtFilter;
 
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(
-            HttpSecurity http)
+    SecurityFilterChain securityFilterChain(HttpSecurity http)
             throws Exception {
 
         http
@@ -70,22 +56,29 @@ public class SecurityConfig {
 
                 .cors(Customizer.withDefaults())
 
-                .sessionManagement(session -> session.sessionCreationPolicy(
-                        SessionCreationPolicy.STATELESS))
+                .sessionManagement(session ->
+
+                        session.sessionCreationPolicy(
+                                SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(auth -> auth
 
                         .requestMatchers("/api/auth/**")
+
                         .permitAll()
 
                         .anyRequest()
+
                         .authenticated())
 
                 .addFilterBefore(
+
                         jwtFilter,
+
                         UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+
     }
 
     @Bean
@@ -97,10 +90,35 @@ public class SecurityConfig {
 
     @Bean
     AuthenticationManager authenticationManager(
-            AuthenticationConfiguration config)
+
+            AuthenticationConfiguration configuration)
+
             throws Exception {
 
-        return config.getAuthenticationManager();
+        return configuration.getAuthenticationManager();
+
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+
+        CorsConfiguration configuration =
+
+                new CorsConfiguration();
+
+        configuration.setAllowedOrigins(List.of("*"));
+
+        configuration.setAllowedHeaders(List.of("*"));
+
+        configuration.setAllowedMethods(List.of("*"));
+
+        UrlBasedCorsConfigurationSource source =
+
+                new UrlBasedCorsConfigurationSource();
+
+        source.registerCorsConfiguration("/**", configuration);
+
+        return source;
 
     }
 
