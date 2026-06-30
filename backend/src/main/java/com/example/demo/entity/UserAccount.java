@@ -93,6 +93,9 @@ public class UserAccount implements UserDetails {
         this.isActive = isActive;
         this.createdAt = createdAt;
     }
+    public long getId() {
+        return id;
+    }
     public String getEmail() {
         return email;
     }
