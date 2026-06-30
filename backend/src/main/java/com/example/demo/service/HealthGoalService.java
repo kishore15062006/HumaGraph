@@ -9,11 +9,11 @@ import com.example.demo.repository.HealthGoalRepository;
 
 public class HealthGoalService {
 
-    // @Autowired
-    // private HealthGoalRepository goalRepository;
+    @Autowired
+    private HealthGoalRepository goalRepository;
 
-    // public List<GoalResponseDto> getGoalsByUser(long id) {
-    //     return goalRepository.getGoalsByUser(id);
-    // }
+    public List<GoalResponseDto> getGoalsByUser(long id) {
+        return goalRepository.getGoalsByUser(id);
+    }
     
 }
