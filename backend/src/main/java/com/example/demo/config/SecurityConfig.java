@@ -2,6 +2,8 @@ package com.example.demo.config;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -26,6 +28,8 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -34,27 +38,26 @@ import org.springframework.web.cors.CorsConfiguration;
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtFilter;
+
     @Bean
-CorsConfigurationSource corsConfigurationSource() {
+    CorsConfigurationSource corsConfigurationSource() {
 
-    CorsConfiguration configuration =
-            new CorsConfiguration();
+        CorsConfiguration configuration = new CorsConfiguration();
 
-    configuration.setAllowedOrigins(List.of("*"));
+        configuration.setAllowedOrigins(List.of("*"));
 
-    configuration.setAllowedMethods(List.of("*"));
+        configuration.setAllowedMethods(List.of("*"));
 
-    configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowedHeaders(List.of("*"));
 
-    UrlBasedCorsConfigurationSource source =
-            new UrlBasedCorsConfigurationSource();
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
-    source.registerCorsConfiguration("/**",
-            configuration);
+        source.registerCorsConfiguration("/**",
+                configuration);
 
-    return source;
+        return source;
 
-}
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(
@@ -67,9 +70,8 @@ CorsConfigurationSource corsConfigurationSource() {
 
                 .cors(Customizer.withDefaults())
 
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(
-                                SessionCreationPolicy.STATELESS))
+                .sessionManagement(session -> session.sessionCreationPolicy(
+                        SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(auth -> auth
 
