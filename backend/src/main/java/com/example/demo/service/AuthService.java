@@ -15,7 +15,6 @@ import com.example.demo.dto.AuthResponseDto;
 import com.example.demo.dto.RegisterDto;
 
 import com.example.demo.entity.BiometricProfile;
-import com.example.demo.entity.Role;
 import com.example.demo.entity.UserAccount;
 
 import com.example.demo.repository.BiometricProfileRepository;
@@ -52,7 +51,7 @@ public class AuthService {
                 .password(
                         passwordEncoder.encode(request.getPassword()))
 
-                .role(Role.USER)
+                .role(UserAccount.UserRRole.USER)
 
                 .build();
 
