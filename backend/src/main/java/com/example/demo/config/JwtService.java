@@ -14,6 +14,7 @@ import com.example.demo.entity.UserAccount;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
@@ -39,11 +40,11 @@ public class JwtService {
         claims.put("role", user.getRole().name());
 
         return Jwts.builder()
-                .claims(claims)
-                .subject(user.getEmail())
-                .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + jwtExpiration))
-                .signWith(getSigningKey(), Jwts.SIG.HS256)
+                .setClaims(claims)
+                .setSubject(user.getEmail())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
@@ -55,8 +56,7 @@ public class JwtService {
         return extractAllClaims(token).get("id", Long.class);
     }
 
-    public boolean isTokenValid(String token,
-                                UserDetails userDetails) {
+    public boolean isTokenValid(String token, UserDetails userDetails) {
 
         return extractUsername(token)
                 .equals(userDetails.getUsername())
@@ -65,15 +65,13 @@ public class JwtService {
 
     private boolean isTokenExpired(String token) {
 
-        return extractExpiration(token)
-                .before(new Date());
+        return extractExpiration(token).before(new Date());
 
     }
 
     private Date extractExpiration(String token) {
 
-        return extractClaim(token,
-                Claims::getExpiration);
+        return extractClaim(token, Claims::getExpiration);
 
     }
 
@@ -88,11 +86,11 @@ public class JwtService {
 
     private Claims extractAllClaims(String token) {
 
-        return Jwts.parser()
-                .verifyWith(getSigningKey())
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
                 .build()
-                .parseSignedClaims(token)
-                .getPayload();
+                .parseClaimsJws(token)
+                .getBody();
 
     }
 
