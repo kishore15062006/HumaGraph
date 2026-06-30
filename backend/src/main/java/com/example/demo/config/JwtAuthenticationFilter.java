@@ -1,10 +1,11 @@
 package com.example.demo.config;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -16,15 +17,20 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 
 @Component
-@RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
 
-    private final UserAccountRepository userRepository;
+    private final UserAccountRepository repository;
+
+    public JwtAuthenticationFilter(JwtService jwtService,
+                                   UserAccountRepository repository) {
+
+        this.jwtService = jwtService;
+        this.repository = repository;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -32,7 +38,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        final String authHeader =
+        String authHeader =
                 request.getHeader("Authorization");
 
         if (authHeader == null ||
@@ -40,6 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             filterChain.doFilter(request, response);
             return;
+
         }
 
         String jwt = authHeader.substring(7);
@@ -51,32 +58,40 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         .getAuthentication() == null) {
 
             UserAccount user =
-                    userRepository.findByEmail(email)
+                    repository.findByEmail(email)
                             .orElse(null);
 
             if (user != null &&
                     jwtService.isTokenValid(jwt, user)) {
 
-                UsernamePasswordAuthenticationToken authToken =
+                UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(
-                                user,
-                                null,
-                                user.getAuthorities()
 
+                                user,
+
+                                null,
+
+                                List.of(
+                                        new SimpleGrantedAuthority(
+                                                "ROLE_" + user.getRole().name()
+                                        )
+                                )
                         );
 
-                authToken.setDetails(
+                authentication.setDetails(
                         new WebAuthenticationDetailsSource()
                                 .buildDetails(request)
                 );
 
-                SecurityContextHolder
-                        .getContext()
-                        .setAuthentication(authToken);
+                SecurityContextHolder.getContext()
+                        .setAuthentication(authentication);
+
             }
+
         }
 
         filterChain.doFilter(request, response);
+
     }
 
 }
