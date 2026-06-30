@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -49,6 +50,31 @@ public class UserAccount implements UserDetails {
                         "ROLE_" + role.name()
                 )
         );
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     public UserAccount(){}
