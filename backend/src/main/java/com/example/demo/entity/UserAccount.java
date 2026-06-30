@@ -77,6 +77,11 @@ public class UserAccount implements UserDetails {
         return true;
     }
 
+    @Override
+    public String getPassword(){
+        return passwordHash;
+    }
+
     public UserAccount(){}
 
     public UserAccount(long id, String email, String passwordHash, UserRole role, boolean isActive,
