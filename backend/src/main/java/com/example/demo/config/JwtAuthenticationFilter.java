@@ -22,14 +22,12 @@ import jakarta.servlet.http.HttpServletResponse;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
-
-    private final UserAccountRepository repository;
+    private final UserAccountRepository userAccountRepository;
 
     public JwtAuthenticationFilter(JwtService jwtService,
-                                   UserAccountRepository repository) {
-
+                                   UserAccountRepository userAccountRepository) {
         this.jwtService = jwtService;
-        this.repository = repository;
+        this.userAccountRepository = userAccountRepository;
     }
 
     @Override
@@ -38,39 +36,37 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        String authHeader =
-                request.getHeader("Authorization");
+        String authHeader = request.getHeader("Authorization");
 
-        if (authHeader == null ||
-                !authHeader.startsWith("Bearer ")) {
-
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
-
         }
 
         String jwt = authHeader.substring(7);
 
-        String email = jwtService.extractUsername(jwt);
+        String email;
+
+        try {
+            email = jwtService.extractUsername(jwt);
+        } catch (Exception e) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         if (email != null &&
-                SecurityContextHolder.getContext()
-                        .getAuthentication() == null) {
+                SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            UserAccount user =
-                    repository.findByEmail(email)
-                            .orElse(null);
+            UserAccount user = userAccountRepository
+                    .findByEmail(email)
+                    .orElse(null);
 
-            if (user != null &&
-                    jwtService.isTokenValid(jwt, user)) {
+            if (user != null && jwtService.isTokenValid(jwt, user)) {
 
-                UsernamePasswordAuthenticationToken authentication =
+                UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(
-
                                 user,
-
                                 null,
-
                                 List.of(
                                         new SimpleGrantedAuthority(
                                                 "ROLE_" + user.getRole().name()
@@ -78,20 +74,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                 )
                         );
 
-                authentication.setDetails(
+                authToken.setDetails(
                         new WebAuthenticationDetailsSource()
                                 .buildDetails(request)
                 );
 
                 SecurityContextHolder.getContext()
-                        .setAuthentication(authentication);
-
+                        .setAuthentication(authToken);
             }
-
         }
 
         filterChain.doFilter(request, response);
-
     }
-
 }
