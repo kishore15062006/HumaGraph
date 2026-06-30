@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,12 +20,12 @@ public class HealthGoalController {
     @Autowired
     private HealthGoalService goalService;
 
-    // @GetMapping
-    // public ResponseEntity<List<GoalResponseDto>> getGoals(@AuthenticationPrincipal UserPrincipal user){
+    @GetMapping
+    public ResponseEntity<List<GoalResponseDto>> getGoals(@AuthenticationPrincipal UserPrincipal user){
 
-    //     List<GoalResponseDto> goals=goalService.getGoalsByUser(user.getId());
+        List<GoalResponseDto> goals=goalService.getGoalsByUser(user.getId());
 
-    //     return ResponseEntity.ok(goals);
-    // }
+        return ResponseEntity.ok(goals);
+    }
     
 }
