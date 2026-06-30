@@ -2,7 +2,6 @@ package com.example.demo.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
@@ -11,23 +10,17 @@ import com.example.demo.repository.UserAccountRepository;
 @Configuration
 public class ApplicationConfig {
 
-    private final UserAccountRepository repository;
+    private final UserAccountRepository userAccountRepository;
 
-    public ApplicationConfig(UserAccountRepository repository) {
-
-        this.repository = repository;
-
+    public ApplicationConfig(UserAccountRepository userAccountRepository) {
+        this.userAccountRepository = userAccountRepository;
     }
 
     @Bean
-    UserDetailsService userDetailsService() {
-
-        return username -> repository.findByEmail(username)
-
+    public UserDetailsService userDetailsService() {
+        return username -> userAccountRepository
+                .findByEmail(username)
                 .orElseThrow(() ->
-
                         new UsernameNotFoundException("User not found"));
-
     }
-
 }
