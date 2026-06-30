@@ -51,7 +51,7 @@ public class AuthService {
                 .password(
                         passwordEncoder.encode(request.getPassword()))
 
-                .role(UserAccount.UserRRole.USER)
+                .role(UserAccount.UserRole.INDIVIDUAL)
 
                 .build();
 
