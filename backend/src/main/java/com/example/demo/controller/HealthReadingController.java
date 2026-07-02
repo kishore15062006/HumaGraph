@@ -46,14 +46,14 @@ public class HealthReadingController {
                 return ResponseEntity.ok(response);
         }
 
-        // @GetMapping("/summary")
-        // public ResponseEntity<List<DailySummaryDto>> getWeeklySummary(
-        //                 @AuthenticationPrincipal UserAccount user) {
+        @GetMapping("/summary")
+        public ResponseEntity<List<DailySummaryDto>> getWeeklySummary(
+                        @AuthenticationPrincipal UserAccount user) {
 
-        //         List<DailySummaryDto> summary = readingService.getWeeklySummary(user.getId());
+                List<DailySummaryDto> summary = readingService.getDailySummary(user.getId());
 
-        //         return ResponseEntity.ok(summary);
-        // }
+                return ResponseEntity.ok(summary);
+        }
 
         @GetMapping("/patient/{profileId}")
         public ResponseEntity<List<ReadingResponseDto>> getPatientReadings(
@@ -65,25 +65,25 @@ public class HealthReadingController {
                 return ResponseEntity.ok(readings);
         }
 
-        // @PutMapping("/{id}")
-        // public ResponseEntity<ReadingResponseDto> updateReading(
-        //                 @AuthenticationPrincipal UserAccount user,
-        //                 @PathVariable Long id,
-        //                 @RequestBody ReadingRequestDto requestDto) {
+        @PutMapping("/{id}")
+        public ResponseEntity<ReadingResponseDto> updateReading(
+                        @AuthenticationPrincipal UserAccount user,
+                        @PathVariable Long id,
+                        @RequestBody ReadingRequestDto requestDto) {
 
-        //         ReadingResponseDto updated = readingService.updateReading(user.getId(), id, requestDto);
+                ReadingResponseDto updated = readingService.updateReading(user.getId(), id, requestDto);
 
-        //         return ResponseEntity.ok(updated);
-        // }
+                return ResponseEntity.ok(updated);
+        }
 
-        // @DeleteMapping("/{id}")
-        // public ResponseEntity<Void> deleteReading(
-        //                 @AuthenticationPrincipal UserAccount user,
-        //                 @PathVariable Long id) {
+        @DeleteMapping("/{id}")
+        public ResponseEntity<Void> deleteReading(
+                        @AuthenticationPrincipal UserAccount user,
+                        @PathVariable Long id) {
 
-        //         readingService.deleteReading(user.getId(), id);
+                readingService.deleteReading(user.getId(), id);
 
-        //         return ResponseEntity.ok().build();
-        // }
+                return ResponseEntity.ok().build();
+        }
 
 }
