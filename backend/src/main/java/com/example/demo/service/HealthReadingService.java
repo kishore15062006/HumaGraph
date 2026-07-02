@@ -38,7 +38,7 @@ public class HealthReadingService {
             HealthMetricRepository metricRepository,
             PractitionerGrantRepository grantRepository,
             HealthGoalService goalService) {
-        this.
+        this.goalService=goalService;
         this.metricRepository=metricRepository;
         this.readingRepository = readingRepository;
         this.profileRepository = profileRepository;
