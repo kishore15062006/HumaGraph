@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.dto.DailySummaryDto;
 import com.example.demo.dto.ReadingRequestDto;
 import com.example.demo.dto.ReadingResponseDto;
+import com.example.demo.entity.UserAccount;
 import com.example.demo.service.HealthReadingService;
 
 @RestController
@@ -27,7 +29,7 @@ public class HealthReadingController {
         private HealthReadingService readingService;
 
         @GetMapping
-        public ResponseEntity<List<ReadingResponseDto>> getMyReadings(@AuthenticationPrincipal UserPrincipal user) {
+        public ResponseEntity<List<ReadingResponseDto>> getMyReadings(@AuthenticationPrincipal UserAccount user) {
 
                 List<ReadingResponseDto> readings = readingService.getReadingsByUser(user.getId());
 
@@ -36,7 +38,7 @@ public class HealthReadingController {
 
         @PostMapping
         public ResponseEntity<ReadingResponseDto> createReading(
-                        @AuthenticationPrincipal UserPrincipal user,
+                        @AuthenticationPrincipal UserAccount user,
                         @RequestBody ReadingRequestDto requestDto) {
 
                 ReadingResponseDto response = readingService.createReading(user.getId(), requestDto);
@@ -46,7 +48,7 @@ public class HealthReadingController {
 
         @GetMapping("/summary")
         public ResponseEntity<List<DailySummaryDto>> getWeeklySummary(
-                        @AuthenticationPrincipal UserPrincipal user) {
+                        @AuthenticationPrincipal UserAccount user) {
 
                 List<DailySummaryDto> summary = readingService.getSevenDayHeartRateSummary(user.getId());
 
@@ -55,7 +57,7 @@ public class HealthReadingController {
 
         @GetMapping("/patient/{profileId}")
         public ResponseEntity<List<ReadingResponseDto>> getPatientReadings(
-                        @AuthenticationPrincipal UserPrincipal user,
+                        @AuthenticationPrincipal UserAccount user,
                         @PathVariable Long profileId) {
 
                 List<ReadingResponseDto> readings = readingService.getPatientReadings(user.getId(), profileId);
@@ -65,7 +67,7 @@ public class HealthReadingController {
 
         @PutMapping("/{id}")
         public ResponseEntity<ReadingResponseDto> updateReading(
-                        @AuthenticationPrincipal UserPrincipal user,
+                        @AuthenticationPrincipal UserAccount user,
                         @PathVariable Long id,
                         @RequestBody ReadingRequestDto requestDto) {
 
@@ -76,7 +78,7 @@ public class HealthReadingController {
 
         @DeleteMapping("/{id}")
         public ResponseEntity<Void> deleteReading(
-                        @AuthenticationPrincipal UserPrincipal user,
+                        @AuthenticationPrincipal UserAccount user,
                         @PathVariable Long id) {
 
                 readingService.deleteReading(user.getId(), id);
