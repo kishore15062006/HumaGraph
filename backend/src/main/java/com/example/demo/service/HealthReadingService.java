@@ -165,4 +165,62 @@ public class HealthReadingService {
         return mapToDto(reading);
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    public ReadingResponseDto updateReading(Long userId,
+            Long readingId,
+            ReadingRequestDto dto) {
+
+        HealthReading reading = readingRepository.findById(readingId)
+                .orElseThrow(() -> new BusinessValidationException("Reading not found"));
+
+        if (reading.getProfile().getUserAccount().getId() != userId) {
+            throw new BusinessValidationException("Unauthorized action");
+        }
+
+        reading.setNumericValue(dto.getNumericValue());
+        reading.setRecordedAt(dto.getRecordedAt());
+        reading.setSource(dto.getSource());
+
+        HealthReading.ReadingStatus status = HealthReading.ReadingStatus.NORMAL;
+
+        if ("Heart Rate".equalsIgnoreCase(reading.getMetric().getName())) {
+
+            if (dto.getNumericValue() > 300) {
+                throw new BusinessValidationException(
+                        "Heart Rate cannot exceed 300 bpm");
+            }
+
+            if (dto.getNumericValue() < 40 ||
+                    dto.getNumericValue() > 120) {
+
+                status = HealthReading.ReadingStatus.OUT_OF_BOUNDS;
+            }
+        }
+
+        reading.setStatus(status);
+
+        reading = readingRepository.save(reading);
+
+        goalService.evaluateGoalsAgainstNewReading(
+                reading.getProfile().getId(),
+                reading.getMetric().getId(),
+                reading.getNumericValue());
+
+        return mapToDto(reading);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteReading(Long userId,
+            Long readingId) {
+
+        HealthReading reading = readingRepository.findById(readingId)
+                .orElseThrow(() -> new BusinessValidationException("Reading not found"));
+
+        if (reading.getProfile().getUserAccount().getId() != userId) {
+            throw new BusinessValidationException("Unauthorized action");
+        }
+
+        readingRepository.delete(reading);
+    }
+
 }
