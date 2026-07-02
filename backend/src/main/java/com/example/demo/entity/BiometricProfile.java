@@ -13,13 +13,13 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="biometric_profile")
+@Table(name = "biometric_profile")
 public class BiometricProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="user_account_id",nullable = false,unique = true)
+    @JoinColumn(name = "user_account_id", nullable = false, unique = true)
     private UserAccount userAccount;
     @Column(nullable = false)
     private String fullName;
@@ -28,8 +28,9 @@ public class BiometricProfile {
     private String gender;
     private String bloodType;
 
-    public BiometricProfile(){}
-    
+    public BiometricProfile() {
+    }
+
     public BiometricProfile(long id, UserAccount userAccount, String fullName, LocalDate dateOfBirth, String gender,
             String bloodType) {
         this.id = id;
@@ -39,36 +40,49 @@ public class BiometricProfile {
         this.gender = gender;
         this.bloodType = bloodType;
     }
-    
+
+    public long getId() {
+        return id;
+    }
+
     public UserAccount getUserAccount() {
         return userAccount;
     }
+
     public void setUserAccount(UserAccount userAccount) {
         this.userAccount = userAccount;
     }
+
     public String getFullName() {
         return fullName;
     }
+
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }
+
     public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
+
     public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
+
     public String getGender() {
         return gender;
     }
+
     public void setGender(String gender) {
         this.gender = gender;
     }
+
     public String getBloodType() {
         return bloodType;
     }
+
     public void setBloodType(String bloodType) {
         this.bloodType = bloodType;
     }
-    
+
 }
