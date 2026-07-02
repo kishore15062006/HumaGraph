@@ -13,4 +13,6 @@ public interface PractitionerGrantRepository extends JpaRepository<PractitionerG
     List<PractitionerGrant> findByPractitionerAccountId(Long practitionerId);
     List<PractitionerGrant> findByPatientProfileId(Long profileId);
     Optional<PractitionerGrant> findByPractitionerAccountIdAndPatientProfileId(Long practitionerId,Long profileId);
+    
+
 }
