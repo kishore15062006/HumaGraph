@@ -15,7 +15,7 @@ public class HealthReadingService {
     private HealthReadingRepository healthReadingRepo;
 
     public List<ReadingResponseDto> getReadingsByUser(Long userId) {
-        return healthReadingRepo.find
+        return healthReadingRepo.findByUserAccountId(userId);
     }
 
     public ReadingResponseDto addReading(ReadingResponseDto readingResponse) {
