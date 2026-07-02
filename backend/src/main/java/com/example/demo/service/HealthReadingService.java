@@ -14,9 +14,8 @@ public class HealthReadingService {
     @Autowired
     private HealthReadingRepository healthReadingRepo;
 
-    public List<ReadingResponseDto> getReadings() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getReadings'");
+    public List<ReadingResponseDto> getReadingsByUser(Long userId) {
+        return healthReadingRepo.find
     }
 
     public ReadingResponseDto addReading(ReadingResponseDto readingResponse) {
