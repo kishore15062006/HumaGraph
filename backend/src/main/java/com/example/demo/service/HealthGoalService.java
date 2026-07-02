@@ -40,8 +40,7 @@ public class HealthGoalService {
 
         BiometricProfile profile = profileRepository
                 .findByUserAccountId(userId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Profile not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Profile not found"));
 
         return goalRepository.findByProfileId(profile.getId())
                 .stream()
@@ -64,81 +63,128 @@ public class HealthGoalService {
     }
 
     @Transactional(readOnly = true)
-public GoalSummaryDto getGoalSummary(Long userId) {
+    public GoalSummaryDto getGoalSummary(Long userId) {
 
-    BiometricProfile profile = profileRepository
-            .findByUserAccountId(userId)
-            .orElseThrow(() ->
-                    new ResourceNotFoundException("Profile not found"));
+        BiometricProfile profile = profileRepository
+                .findByUserAccountId(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Profile not found"));
 
-    List<HealthGoal> goals = goalRepository.findByProfileId(profile.getId());
+        List<HealthGoal> goals = goalRepository.findByProfileId(profile.getId());
 
-    GoalSummaryDto dto = new GoalSummaryDto();
+        GoalSummaryDto dto = new GoalSummaryDto();
 
-    if (goals.isEmpty()) {
-        dto.setTotalGoals(0);
-        dto.setAchievedGoals(0);
-        dto.setAverageProgress(0.0);
+        if (goals.isEmpty()) {
+            dto.setTotalGoals(0);
+            dto.setAchievedGoals(0);
+            dto.setAverageProgress(0.0);
+            return dto;
+        }
+
+        int achieved = 0;
+        double totalProgress = 0;
+
+        for (HealthGoal goal : goals) {
+
+            if (goal.getStatus() == HealthGoal.GoalStatus.ACHIEVED) {
+                achieved++;
+            }
+
+            double progress = goal.getCurrentValue() / goal.getTargetValue();
+
+            if (progress > 1.0) {
+                progress = 1.0;
+            }
+
+            totalProgress += progress;
+        }
+
+        dto.setTotalGoals(goals.size());
+        dto.setAchievedGoals(achieved);
+        dto.setAverageProgress(totalProgress / goals.size());
+
         return dto;
     }
 
-    int achieved = 0;
-    double totalProgress = 0;
+    @Transactional(rollbackFor = Exception.class)
+    public GoalResponseDto createGoal(Long userId,
+            GoalRequestDto dto) {
 
-    for (HealthGoal goal : goals) {
+        BiometricProfile profile = profileRepository
+                .findByUserAccountId(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Profile not found"));
 
-        if (goal.getStatus() == HealthGoal.GoalStatus.ACHIEVED) {
-            achieved++;
-        }
+        HealthMetric metric = metricRepository
+                .findById(dto.getMetricId())
+                .orElseThrow(() -> new ResourceNotFoundException("Metric not found"));
 
-        double progress = goal.getCurrentValue() / goal.getTargetValue();
+        HealthGoal goal = new HealthGoal();
 
-        if (progress > 1.0) {
-            progress = 1.0;
-        }
+        goal.setProfile(profile);
+        goal.setMetric(metric);
+        goal.setTargetValue(dto.getTargetValue());
+        goal.setCurrentValue(0.0);
+        goal.setTargetDate(dto.getTargetDate());
+        goal.setStatus(HealthGoal.GoalStatus.IN_PROGRESS);
 
-        totalProgress += progress;
+        goal = goalRepository.save(goal);
+
+        return mapToDto(goal);
     }
 
-    dto.setTotalGoals(goals.size());
-    dto.setAchievedGoals(achieved);
-    dto.setAverageProgress(totalProgress / goals.size());
+    @Transactional(rollbackFor = Exception.class)
+    public GoalResponseDto updateGoal(Long userId,
+            Long goalId,
+            GoalRequestDto dto) {
 
-    return dto;
-}
+        HealthGoal goal = goalRepository.findById(goalId)
+                .orElseThrow(() -> new ResourceNotFoundException("Goal not found"));
 
-@Transactional(rollbackFor = Exception.class)
-public GoalResponseDto createGoal(Long userId,
-                                  GoalRequestDto dto) {
+        if (goal.getProfile().getUserAccount().getId() != userId) {
+            throw new BusinessValidationException("Unauthorized action");
+        }
 
-    BiometricProfile profile = profileRepository
-            .findByUserAccountId(userId)
-            .orElseThrow(() ->
-                    new ResourceNotFoundException("Profile not found"));
+        goal.setTargetValue(dto.getTargetValue());
+        goal.setTargetDate(dto.getTargetDate());
 
-    HealthMetric metric = metricRepository
-            .findById(dto.getMetricId())
-            .orElseThrow(() ->
-                    new ResourceNotFoundException("Metric not found"));
+        goal = goalRepository.save(goal);
 
-    HealthGoal goal = new HealthGoal();
+        return mapToDto(goal);
+    }
 
-    goal.setProfile(profile);
-    goal.setMetric(metric);
-    goal.setTargetValue(dto.getTargetValue());
-    goal.setCurrentValue(0.0);
-    goal.setTargetDate(dto.getTargetDate());
-    goal.setStatus(HealthGoal.GoalStatus.IN_PROGRESS);
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteGoal(Long userId,
+            Long goalId) {
 
-    goal = goalRepository.save(goal);
+        HealthGoal goal = goalRepository.findById(goalId)
+                .orElseThrow(() -> new ResourceNotFoundException("Goal not found"));
 
-    return mapToDto(goal);
-}
+        if (goal.getProfile().getUserAccount().getId() != userId) {
+            throw new BusinessValidationException("Unauthorized action");
+        }
 
+        goalRepository.delete(goal);
+    }
 
+    @Transactional(rollbackFor = Exception.class)
+    public void evaluateGoalsAgainstNewReading(Long profileId,
+            Long metricId,
+            Double newValue) {
 
+        List<HealthGoal> goals = goalRepository.findByProfileIdAndMetricIdAndStatus(
+                profileId,
+                metricId,
+                HealthGoal.GoalStatus.IN_PROGRESS);
 
+        for (HealthGoal goal : goals) {
 
+            goal.setCurrentValue(newValue);
 
+            if (newValue >= goal.getTargetValue()) {
+                goal.setStatus(HealthGoal.GoalStatus.ACHIEVED);
+            }
+
+            goalRepository.save(goal);
+        }
+    }
 
 }
