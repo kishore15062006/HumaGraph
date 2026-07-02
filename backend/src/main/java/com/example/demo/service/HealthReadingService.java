@@ -74,9 +74,46 @@ public class HealthReadingService {
         }
 
         return getReadingsByProfileId(patientProfileId);
-
-    
     }
 
+    @Transactional(readOnly = true)
+    public List<ReadingResponseDto> getReadingsByProfileId(Long profileId) {
+
+        return readingRepository
+                .findByProfileIdOrderByRecordedAtDesc(profileId)
+                .stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+
+    }
+
+    private ReadingResponseDto mapToDto(
+            HealthReading reading) {
+
+        ReadingResponseDto dto = new ReadingResponseDto();
+
+        dto.setId(reading.getId());
+
+        dto.setMetricName(
+                reading.getMetric().getName());
+
+        dto.setUnit(
+                reading.getMetric().getUnit());
+
+        dto.setNumericValue(
+                reading.getNumericValue());
+
+        dto.setRecordedAt(
+                reading.getRecordedAt());
+
+        dto.setStatus(
+                reading.getStatus().name());
+
+        dto.setSource(
+                reading.getSource().name());
+
+        return dto;
+
+    }
 
 }
