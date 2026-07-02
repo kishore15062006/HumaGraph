@@ -36,15 +36,15 @@ public class HealthReadingController {
                 return ResponseEntity.ok(readings);
         }
 
-        // @PostMapping
-        // public ResponseEntity<ReadingResponseDto> createReading(
-        //                 @AuthenticationPrincipal UserAccount user,
-        //                 @RequestBody ReadingRequestDto requestDto) {
+        @PostMapping
+        public ResponseEntity<ReadingResponseDto> createReading(
+                        @AuthenticationPrincipal UserAccount user,
+                        @RequestBody ReadingRequestDto requestDto) {
 
-        //         ReadingResponseDto response = readingService.createReading(user.getId(), requestDto);
+                ReadingResponseDto response = readingService.logReading(user.getId(), requestDto);
 
-        //         return ResponseEntity.ok(response);
-        // }
+                return ResponseEntity.ok(response);
+        }
 
         // @GetMapping("/summary")
         // public ResponseEntity<List<DailySummaryDto>> getWeeklySummary(

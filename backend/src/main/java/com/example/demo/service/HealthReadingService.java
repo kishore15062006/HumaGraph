@@ -30,7 +30,6 @@ public class HealthReadingService {
     private final HealthMetricRepository metricRepository;
     private final HealthGoalService goalService;
     private final PractitionerGrantRepository grantRepository;
-    
 
     public HealthReadingService(
             HealthReadingRepository readingRepository,
@@ -38,8 +37,8 @@ public class HealthReadingService {
             HealthMetricRepository metricRepository,
             PractitionerGrantRepository grantRepository,
             HealthGoalService goalService) {
-        this.goalService=goalService;
-        this.metricRepository=metricRepository;
+        this.goalService = goalService;
+        this.metricRepository = metricRepository;
         this.readingRepository = readingRepository;
         this.profileRepository = profileRepository;
         this.grantRepository = grantRepository;
@@ -116,6 +115,54 @@ public class HealthReadingService {
 
         return dto;
 
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public ReadingResponseDto logReading(Long userId,
+            ReadingRequestDto dto) {
+
+        BiometricProfile profile = profileRepository
+                .findByUserAccountId(userId)
+                .orElseThrow(() -> new BusinessValidationException("Profile not found"));
+
+        HealthMetric metric = metricRepository
+                .findById(dto.getMetricId())
+                .orElseThrow(() -> new BusinessValidationException("Metric not found"));
+
+        HealthReading reading = new HealthReading();
+
+        reading.setProfile(profile);
+        reading.setMetric(metric);
+        reading.setNumericValue(dto.getNumericValue());
+        reading.setRecordedAt(dto.getRecordedAt());
+        reading.setSource(dto.getSource());
+
+        HealthReading.ReadingStatus status = HealthReading.ReadingStatus.NORMAL;
+
+        if ("Heart Rate".equalsIgnoreCase(metric.getName())) {
+
+            if (dto.getNumericValue() > 300) {
+                throw new BusinessValidationException(
+                        "Heart Rate cannot exceed 300 bpm");
+            }
+
+            if (dto.getNumericValue() < 40 ||
+                    dto.getNumericValue() > 120) {
+
+                status = HealthReading.ReadingStatus.OUT_OF_BOUNDS;
+            }
+        }
+
+        reading.setStatus(status);
+
+        reading = readingRepository.save(reading);
+
+        goalService.evaluateGoalsAgainstNewReading(
+                profile.getId(),
+                metric.getId(),
+                reading.getNumericValue());
+
+        return mapToDto(reading);
     }
 
 }
