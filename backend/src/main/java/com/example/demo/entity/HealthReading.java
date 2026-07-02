@@ -96,5 +96,9 @@ public class HealthReading {
     public void setStatus(ReadingStatus status) {
         this.status = status;
     }
+
+    public long getId() {
+        return id;
+    }
     
 }

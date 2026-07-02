@@ -102,5 +102,8 @@ public class HealthGoal {
     public void setStatus(GoalStatus status) {
         this.status = status;
     }
+    public long getId() {
+        return id;
+    }
     
 }

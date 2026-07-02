@@ -81,5 +81,7 @@ public class PractitionerGrant {
     public void setClinicalNote(String clinicalNote) {
         this.clinicalNote = clinicalNote;
     }
-    
+    public long getId() {
+        return id;
+    }
 }

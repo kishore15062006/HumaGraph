@@ -74,5 +74,9 @@ public class HealthMetric {
     public void setSystemStandard(boolean isSystemStandard) {
         this.isSystemStandard = isSystemStandard;
     }
+
+    public long getId() {
+        return id;
+    }
     
 }
