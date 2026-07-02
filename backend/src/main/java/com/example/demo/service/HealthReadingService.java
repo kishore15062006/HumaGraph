@@ -43,4 +43,40 @@ public class HealthReadingService {
         this.goalService = goalService;
     }
 
+    @Transactional(readOnly = true)
+    public List<ReadingResponseDto> getReadingsByUser(Long userId) {
+
+        BiometricProfile profile = profileRepository
+                .findByUserAccountId(userId)
+                .orElseThrow(() -> new BusinessValidationException("Profile not found"));
+
+        return getReadingsByProfileId(profile.getId());
+
+    }
+
+    @Transactional(readOnly = true)
+    public List<ReadingResponseDto> getReadingsForPractitioner(
+            Long practitionerId,
+            Long patientProfileId) {
+
+        PractitionerGrant grant = grantRepository
+                .findByPractitionerAccountIdAndPatientProfileId(
+                        practitionerId,
+                        patientProfileId)
+                .orElseThrow(() -> new BusinessValidationException(
+                        "Access denied"));
+
+        if (grant.getStatus() != PractitionerGrant.GrantStatus.ACTIVE) {
+
+            throw new BusinessValidationException(
+                    "Grant is not ACTIVE");
+
+        }
+
+        return getReadingsByProfileId(patientProfileId);
+
+    
+    }
+
+
 }
