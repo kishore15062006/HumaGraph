@@ -14,5 +14,6 @@ public interface HealthReadingRepository extends JpaRepository<HealthReading,Lon
     List<HealthReading> findByProfileIdAndStatus(Long profileId,HealthReading.ReadingStatus status);
     List<HealthReading> findByProfileIdOrderByRecordedAtDesc(Long profileId);
     List<ReadingResponseDto> findByUserAccountId(Long userId);
+    List<ReadingResponseDto> getReadingsForPractitioner(Long practitionerId, Long patientProfileId);
     
 }

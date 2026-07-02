@@ -18,8 +18,8 @@ public class HealthReadingService {
         return healthReadingRepo.findByUserAccountId(userId);
     }
 
-    public List<ReadingResponseDto> getReadingsForPractitioner(Long PractitionerId,Long patientProfileId) {
-        return healthReadingRepo.getReadingsForPractitioner();
+    public List<ReadingResponseDto> getReadingsForPractitioner(Long practitionerId,Long patientProfileId) {
+        return healthReadingRepo.getReadingsForPractitioner(practitionerId,patientProfileId);
     }
 
     public ReadingResponseDto addReading(ReadingResponseDto readingResponse) {
