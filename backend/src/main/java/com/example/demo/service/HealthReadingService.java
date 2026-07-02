@@ -35,9 +35,7 @@ public class HealthReadingService {
 
         this.readingRepository = readingRepository;
         this.profileRepository = profileRepository;
-        
         this.grantRepository = grantRepository;
-       
     }
 
     @Transactional(readOnly = true)
