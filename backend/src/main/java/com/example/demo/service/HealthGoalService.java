@@ -15,7 +15,7 @@ public class HealthGoalService {
     private HealthGoalRepository goalRepository;
 
     public List<GoalResponseDto> getGoalsByUser(long id) {
-        return goalRepository.getGoalsBy(id);
+        return goalRepository.getGoalsById(id);
     }
     
 }
