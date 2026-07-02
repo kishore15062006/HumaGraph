@@ -8,7 +8,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.dto.ReadingResponseDto;
 import com.example.demo.entity.BiometricProfile;
+import java.time.LocalDate;
+import java.util.TreeMap;
 
+import com.example.demo.dto.DailySummaryDto;
+import com.example.demo.dto.ReadingRequestDto;
+import com.example.demo.entity.HealthMetric;
 import com.example.demo.entity.HealthReading;
 import com.example.demo.entity.PractitionerGrant;
 import com.example.demo.exception.BusinessValidationException;
@@ -22,7 +27,8 @@ public class HealthReadingService {
 
     private final HealthReadingRepository readingRepository;
     private final BiometricProfileRepository profileRepository;
-    
+    private final HealthMetricRepository metricRepository;
+    private final HealthGoalService goalService;
     private final PractitionerGrantRepository grantRepository;
     
 
@@ -32,7 +38,8 @@ public class HealthReadingService {
             HealthMetricRepository metricRepository,
             PractitionerGrantRepository grantRepository,
             HealthGoalService goalService) {
-
+        this.
+        this.metricRepository=metricRepository;
         this.readingRepository = readingRepository;
         this.profileRepository = profileRepository;
         this.grantRepository = grantRepository;
