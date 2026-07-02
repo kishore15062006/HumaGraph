@@ -41,7 +41,7 @@ public class HealthReadingController {
                         @AuthenticationPrincipal UserAccount user,
                         @RequestBody ReadingRequestDto requestDto) {
 
-                ReadingResponseDto response = readingService.createReading(user.getId(), requestDto);
+                ReadingResponseDto response = readingService.logReading(user.getId(), requestDto);
 
                 return ResponseEntity.ok(response);
         }
@@ -50,7 +50,7 @@ public class HealthReadingController {
         public ResponseEntity<List<DailySummaryDto>> getWeeklySummary(
                         @AuthenticationPrincipal UserAccount user) {
 
-                List<DailySummaryDto> summary = readingService.getSevenDayHeartRateSummary(user.getId());
+                List<DailySummaryDto> summary = readingService.getDailySummary(user.getId());
 
                 return ResponseEntity.ok(summary);
         }
