@@ -1,6 +1,9 @@
 package com.example.demo.service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -9,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.dto.ReadingResponseDto;
 import com.example.demo.entity.BiometricProfile;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.TreeMap;
 
 import com.example.demo.dto.DailySummaryDto;
@@ -221,6 +225,66 @@ public class HealthReadingService {
         }
 
         readingRepository.delete(reading);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ReadingResponseDto> getTrends(Long userId) {
+
+        return getReadingsByUser(userId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<DailySummaryDto> getDailySummary(Long userId) {
+
+        BiometricProfile profile = profileRepository
+                .findByUserAccountId(userId)
+                .orElseThrow(() -> new BusinessValidationException("Profile not found"));
+
+        List<HealthReading> readings = readingRepository.findByProfileIdOrderByRecordedAtDesc(
+                profile.getId());
+
+        Map<LocalDate, List<HealthReading>> grouped = new TreeMap<>();
+
+        for (HealthReading reading : readings) {
+
+            if (!"Heart Rate".equalsIgnoreCase(
+                    reading.getMetric().getName())) {
+                continue;
+            }
+
+            LocalDate day = reading.getRecordedAt().toLocalDate();
+
+            grouped.computeIfAbsent(day,
+                    k -> new ArrayList<>()).add(reading);
+        }
+
+        List<DailySummaryDto> summary = new ArrayList<>();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd");
+
+        for (Map.Entry<LocalDate, List<HealthReading>> entry : grouped.entrySet()) {
+
+            double avg = entry.getValue()
+                    .stream()
+                    .mapToDouble(HealthReading::getNumericValue)
+                    .average()
+                    .orElse(0);
+
+            DailySummaryDto dto = new DailySummaryDto();
+
+            dto.setDay(entry.getKey().format(formatter));
+            dto.setAverage(avg);
+
+            summary.add(dto);
+        }
+
+        Collections.reverse(summary);
+
+        if (summary.size() > 7) {
+            summary = summary.subList(0, 7);
+        }
+
+        return summary;
     }
 
 }
