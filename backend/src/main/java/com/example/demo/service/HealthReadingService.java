@@ -17,6 +17,10 @@ public class HealthReadingService {
     public List<ReadingResponseDto> getReadingsByUser(Long userId) {
         return healthReadingRepo.findByUserAccountId(userId);
     }
+    
+    public List<ReadingResponseDto> getReadingsByUser(Long userId) {
+        return healthReadingRepo.findByUserAccountId(userId);
+    }
 
     public ReadingResponseDto addReading(ReadingResponseDto readingResponse) {
         // TODO Auto-generated method stub
