@@ -12,10 +12,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class GoalResponseDto {
-    Long id
-String metricName
-Double targetValue
+    Long id;
+    String metricName;
+    Double targetValue;
     Double currentValue;
-LocalDate targetDate;
-String status;
+    LocalDate targetDate;
+    String status;
 }
