@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -184,6 +185,32 @@ public class PractitionerGrantService {
         grantRepository.delete(grant);
     }
 
-    
+    @Transactional(readOnly = true)
+public List<GrantResponseDto> getGrants(Long userId,
+                                        String role) {
+
+    List<PractitionerGrant> grants;
+
+    if ("PRACTITIONER".equalsIgnoreCase(role)) {
+
+        grants = grantRepository
+                .findByPractitionerAccountId(userId);
+
+    } else {
+
+        BiometricProfile profile = profileRepository
+                .findByUserAccountId(userId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Profile not found"));
+
+        grants = grantRepository
+                .findByPatientProfileId(profile.getId());
+    }
+
+    return grants.stream()
+            .map(this::mapToDto)
+            .toList();
+}
 
 }
