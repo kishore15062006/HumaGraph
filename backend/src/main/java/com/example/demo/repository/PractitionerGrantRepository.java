@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.demo.entity.PractitionerGrant;
 
-public interface PractitionerGrantRepositoryextends JpaRepository<PractitionerGrant, Long> {
+public interface PractitionerGrantRepository extends JpaRepository<PractitionerGrant, Long> {
 
     List<PractitionerGrant> findByPractitionerAccountId(Long practitionerId);
 

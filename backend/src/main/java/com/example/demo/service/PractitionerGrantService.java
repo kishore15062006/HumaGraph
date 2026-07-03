@@ -213,4 +213,36 @@ public List<GrantResponseDto> getGrants(Long userId,
             .toList();
 }
 
+@Transactional(readOnly = true)
+public Page<GrantResponseDto> getGrants(
+        Long userId,
+        String role,
+        Pageable pageable) {
+
+    Page<PractitionerGrant> grants;
+
+    if ("PRACTITIONER".equalsIgnoreCase(role)) {
+
+        grants = grantRepository
+                .findByPractitionerAccountId(
+                        userId,
+                        pageable);
+
+    } else {
+
+        BiometricProfile profile = profileRepository
+                .findByUserAccountId(userId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Profile not found"));
+
+        grants = grantRepository
+                .findByPatientProfileId(
+                        profile.getId(),
+                        pageable);
+    }
+
+    return grants.map(this::mapToDto);
+}
+
 }
