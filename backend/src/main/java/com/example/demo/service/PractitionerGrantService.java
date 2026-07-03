@@ -33,4 +33,110 @@ public class PractitionerGrantService {
         this.userRepository = userRepository;
         this.profileRepository = profileRepository;
     }
+
+    private GrantResponseDto mapToDto(PractitionerGrant grant) {
+
+    GrantResponseDto dto = new GrantResponseDto();
+
+    dto.setId(grant.getId());
+
+    dto.setPractitionerId(
+            grant.getPractitionerAccount().getId());
+
+    dto.setPatientProfileId(
+            grant.getPatientProfile().getId());
+
+    dto.setPractitionerEmail(
+            grant.getPractitionerAccount().getEmail());
+
+    dto.setPatientName(
+            grant.getPatientProfile().getFullName());
+
+    dto.setStatus(
+            grant.getStatus().name());
+
+    dto.setGrantedAt(
+            grant.getGrantedAt());
+
+    dto.setClinicalNote(
+            grant.getClinicalNote());
+
+    return dto;
+}
+
+@Transactional(rollbackFor = Exception.class)
+public GrantResponseDto requestAccess(
+        Long practitionerId,
+        GrantRequestDto dto) {
+
+    UserAccount practitioner = userRepository
+            .findById(practitionerId)
+            .orElseThrow(() ->
+                    new ResourceNotFoundException(
+                            "Practitioner not found"));
+
+    UserAccount patient = userRepository
+            .findByEmail(dto.getPatientEmail())
+            .orElseThrow(() ->
+                    new ResourceNotFoundException(
+                            "Patient not found"));
+
+    BiometricProfile profile = profileRepository
+            .findByUserAccountId(patient.getId())
+            .orElseThrow(() ->
+                    new ResourceNotFoundException(
+                            "Patient profile not found"));
+
+    Optional<PractitionerGrant> existing =
+            grantRepository
+                    .findByPractitionerAccountIdAndPatientProfileId(
+                            practitionerId,
+                            profile.getId());
+
+    if (existing.isPresent()) {
+
+        PractitionerGrant grant = existing.get();
+
+        if (grant.getStatus()
+                != PractitionerGrant.GrantStatus.REVOKED) {
+
+            throw new BusinessValidationException(
+                    "Grant already requested or active");
+        }
+
+        grantRepository.delete(grant);
+        grantRepository.flush();
+    }
+
+    PractitionerGrant grant =
+            new PractitionerGrant();
+
+    grant.setPractitionerAccount(practitioner);
+
+    grant.setPatientProfile(profile);
+
+    grant.setStatus(
+            PractitionerGrant.GrantStatus.REQUESTED);
+
+    grant.setGrantedAt(null);
+
+    grant.setClinicalNote(null);
+
+    grant = grantRepository.save(grant);
+
+    return mapToDto(grant);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
