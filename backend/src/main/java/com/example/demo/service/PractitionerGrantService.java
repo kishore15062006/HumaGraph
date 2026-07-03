@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -186,63 +187,61 @@ public class PractitionerGrantService {
     }
 
     @Transactional(readOnly = true)
-public List<GrantResponseDto> getGrants(Long userId,
-                                        String role) {
+    public List<GrantResponseDto> getGrants(Long userId,
+            String role) {
 
-    List<PractitionerGrant> grants;
+        List<PractitionerGrant> grants;
 
-    if ("PRACTITIONER".equalsIgnoreCase(role)) {
+        if ("PRACTITIONER".equalsIgnoreCase(role)) {
 
-        grants = grantRepository
-                .findByPractitionerAccountId(userId);
+            grants = grantRepository
+                    .findByPractitionerAccountId(userId);
 
-    } else {
+        } else {
 
-        BiometricProfile profile = profileRepository
-                .findByUserAccountId(userId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Profile not found"));
+            BiometricProfile profile = profileRepository
+                    .findByUserAccountId(userId)
+                    .orElseThrow(() -> new ResourceNotFoundException(
+                            "Profile not found"));
 
-        grants = grantRepository
-                .findByPatientProfileId(profile.getId());
+            grants = grantRepository
+                    .findByPatientProfileId(profile.getId());
+        }
+
+        return grants.stream()
+                .map(this::mapToDto)
+                .toList();
     }
 
-    return grants.stream()
-            .map(this::mapToDto)
-            .toList();
-}
+    @Transactional(readOnly = true)
+    public Page<GrantResponseDto> getGrants(
+            Long userId,
+            String role,
+            Pageable pageable) {
 
-@Transactional(readOnly = true)
-public Page<GrantResponseDto> getGrants(
-        Long userId,
-        String role,
-        Pageable pageable) {
+        Page<PractitionerGrant> grants;
 
-    Page<PractitionerGrant> grants;
+        if ("PRACTITIONER".equalsIgnoreCase(role)) {
 
-    if ("PRACTITIONER".equalsIgnoreCase(role)) {
+            grants = grantRepository
+                    .findByPractitionerAccountId(
+                            userId,
+                            pageable);
 
-        grants = grantRepository
-                .findByPractitionerAccountId(
-                        userId,
-                        pageable);
+        } else {
 
-    } else {
+            BiometricProfile profile = profileRepository
+                    .findByUserAccountId(userId)
+                    .orElseThrow(() -> new ResourceNotFoundException(
+                            "Profile not found"));
 
-        BiometricProfile profile = profileRepository
-                .findByUserAccountId(userId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Profile not found"));
+            grants = grantRepository
+                    .findByPatientProfileId(
+                            profile.getId(),
+                            pageable);
+        }
 
-        grants = grantRepository
-                .findByPatientProfileId(
-                        profile.getId(),
-                        pageable);
+        return grants.map(this::mapToDto);
     }
-
-    return grants.map(this::mapToDto);
-}
 
 }
