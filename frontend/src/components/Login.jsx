@@ -12,6 +12,7 @@ const Login = () => {
             <label htmlFor="Password">Password</label>
             <input type='password' placeholder='*********' required>
             </input>
+            <br></br>
             <button>Sign in</button>
         </form>
     </div>
