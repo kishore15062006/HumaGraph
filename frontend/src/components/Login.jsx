@@ -5,10 +5,11 @@ const Login = () => {
     <div>
         <form>
             <h1>Login</h1>
-            <label htmlFor="Email Address"></label>
+            <label htmlFor="Email Address">Email Address</label>
             <input type='email' placeholder='patient@example.com' required>
             </input>
-            <label htmlFor="Password"></label>
+            <br></br>
+            <label htmlFor="Password">Password</label>
             <input type='password' placeholder='*********' required>
             </input>
             <button>Sign in</button>
