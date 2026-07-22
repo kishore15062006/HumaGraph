@@ -7,9 +7,11 @@ const Login = () => {
             <h1>Login</h1>
             <label htmlFor="Email Address"></label>
             <input type='email' placeholder='patient@example.com' required>
-            <label htmlFor="Password"></label>
-            <input type='password' place></input>
             </input>
+            <label htmlFor="Password"></label>
+            <input type='password' placeholder='*********' required>
+            </input>
+            <button>Sign in</button>
         </form>
     </div>
   )
