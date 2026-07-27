@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import com.example.demo.dto.GoalRequestDto;
 import com.example.demo.dto.GoalResponseDto;
 import com.example.demo.dto.GoalSummaryDto;
+import com.example.demo.entity.HealthGoal;
 import com.example.demo.entity.UserAccount;
 import com.example.demo.service.HealthGoalService;
 
@@ -76,7 +77,7 @@ public class HealthGoalController {
     }
 
     @GetMapping("/page")
-        public ResponseEntity<Page<GoalResponseDto>> getGoals(
+        public ResponseEntity<Page<HealthGoal>> getGoals(
                         @AuthenticationPrincipal UserAccount user,
                         @RequestParam(defaultValue = "0") int page) {
 

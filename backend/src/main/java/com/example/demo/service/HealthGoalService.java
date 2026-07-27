@@ -189,7 +189,7 @@ public class HealthGoalService {
         }
     }
 
-    public Page<GoalResponseDto> getGoalsByUserPage(Long profileId, int pageNumber) {
+    public Page<HealthGoal> getGoalsByUserPage(Long profileId, int pageNumber) {
 
         PageRequest pageable = PageRequest.of(pageNumber, 5);
 
