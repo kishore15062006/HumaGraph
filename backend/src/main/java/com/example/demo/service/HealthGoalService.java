@@ -3,6 +3,8 @@ package com.example.demo.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -186,5 +188,13 @@ public class HealthGoalService {
             goalRepository.save(goal);
         }
     }
+
+    public Page<GoalResponseDto> getGoalsByUserPage(Long profileId, int pageNumber) {
+
+    Page pageable = PageRequest.of(pageNumber, 10);
+
+    Page<HealthGoal> goals = goalRepository.findByProfileId(profileId, pageable);
+
+    return goals.map(this::mapToDto);
 
 }

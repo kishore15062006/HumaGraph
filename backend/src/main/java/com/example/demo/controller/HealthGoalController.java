@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -73,5 +74,14 @@ public class HealthGoalController {
 
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/page")
+        public ResponseEntity<Page<GoalResponseDto>> getGoals(
+                        @AuthenticationPrincipal UserAccount user,
+                        @RequestParam(defaultValue = "0") int page) {
+
+                return ResponseEntity.ok(
+                                goalService.getGoalsByUserPage(user.getId(), page));
+        }
 
 }
