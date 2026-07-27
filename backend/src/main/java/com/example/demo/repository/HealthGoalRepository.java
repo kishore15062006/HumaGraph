@@ -14,5 +14,5 @@ public interface HealthGoalRepository extends JpaRepository<HealthGoal,Long> {
     List<HealthGoal> findByProfileIdAndStatus(Long profileId,HealthGoal.GoalStatus status);
     List<HealthGoal> findByProfileId(Long profileId);
     List<HealthGoal> findByProfileIdAndMetricIdAndStatus(Long profileId,Long metricId,HealthGoal.GoalStatus status);
-    Page<HealthGoal> findByProfileId(Long profileId,Pageable pageable);
+    Page<HealthGoal> findGoalsByProfileId(Long profileId,Pageable pageable);
 }
