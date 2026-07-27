@@ -195,7 +195,7 @@ public class HealthGoalService {
 
         Page<HealthGoal> goals = goalRepository.findGoalsByProfileId(profileId, pageable);
 
-        return goals.map(this::mapToDto);
+        return goals;
 
     }
 
