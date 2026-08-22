@@ -9,7 +9,7 @@ import NotificationStack from "../src/components/ErrorHandler";
 import Login from "../src/components/Login";
 import Register from "../src/components/Register";
 
-import AdminDashboard from "./components/AdminDashboard";
+import AdminDashboard from "../src/components/dashboard/AdminDashboard";
 
 import api from "./services/api";
 
