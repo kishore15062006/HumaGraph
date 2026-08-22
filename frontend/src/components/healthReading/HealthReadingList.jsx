@@ -6,7 +6,7 @@ import {
     deleteReading,
     setSearchQuery,
     setFilterByStatus,
-} from "../../store/";
+} from "../../store/slices/healthReadingSlice";
 
 import SearchFilterBar from "../common/SearchFilterBar";
 import EmptyState from "../common/EmptyState";
