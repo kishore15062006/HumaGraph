@@ -3,10 +3,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Navbar from "../src/components/layout/Navbar";
 import ErrorHandler from "../src/components/ErrorHandler";
-import NotificationStack from "./components/NotificationStack";
+import NotificationStack from "../src/components/NotificationStack";
 
-import Login from "./pages/Login";
-import Register from "./pages/Register";
+import Login from "../src/components/Login";
+import Register from "../src/components/Register";
 
 function App() {
 
