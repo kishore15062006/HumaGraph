@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/HealthComponents.css";
+import "../../styles/HealthComponent.css";
 
 const DomainChart = ({ data }) => {
     if (!data || data.length === 0) {
