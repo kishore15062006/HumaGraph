@@ -1,12 +1,55 @@
-import './App.css';
-import Login from "../src/components/Login"
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import Navbar from "./components/Navbar";
+import ErrorHandler from "./components/ErrorHandler";
+import NotificationStack from "./components/NotificationStack";
+
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 function App() {
-  return (
-    <div className="App">
-      <Login/>
-    </div>
-  );
+
+    return (
+        <BrowserRouter>
+
+            {/* Global Navbar */}
+            <Navbar />
+
+            {/* Global Error Handler */}
+            <ErrorHandler />
+
+            {/* Global Notifications */}
+            <NotificationStack />
+
+            {/* Application Routes */}
+            <Routes>
+
+                {/* Authentication */}
+                <Route
+                    path="/login"
+                    element={<Login />}
+                />
+
+                <Route
+                    path="/register"
+                    element={<Register />}
+                />
+
+                {/* Temporary Home */}
+                <Route
+                    path="/"
+                    element={
+                        <div>
+                            <h1>Welcome to HumaGraph</h1>
+                        </div>
+                    }
+                />
+
+            </Routes>
+
+        </BrowserRouter>
+    );
 }
 
 export default App;
