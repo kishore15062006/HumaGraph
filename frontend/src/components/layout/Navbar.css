@@ -1,0 +1,346 @@
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar {
+    width: 100%;
+    height: 72px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 32px;
+
+    background: #ffffff;
+
+    border-bottom: 1px solid #e2e8f0;
+
+    position: sticky;
+    top: 0;
+
+    z-index: 1000;
+}
+
+
+/* =========================
+   LEFT
+========================= */
+
+.navbar-left {
+    display: flex;
+    align-items: center;
+
+    gap: 42px;
+
+    min-width: 0;
+}
+
+
+/* =========================
+   BRAND
+========================= */
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    color: #0f172a;
+
+    font-size: 20px;
+
+    font-weight: 700;
+
+    text-decoration: none;
+
+    white-space: nowrap;
+}
+
+.navbar-logo-icon {
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #eff6ff;
+
+    border: 1px solid #bfdbfe;
+
+    border-radius: 10px;
+
+    color: #2563eb;
+
+    font-size: 24px;
+
+    font-weight: 400;
+}
+
+
+/* =========================
+   NAV LINKS
+========================= */
+
+.navbar-links {
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+}
+
+.nav-link {
+    position: relative;
+
+    padding: 9px 13px;
+
+    border-radius: 9px;
+
+    color: #64748b;
+
+    font-size: 14px;
+
+    font-weight: 500;
+
+    text-decoration: none;
+
+    transition:
+        color 0.2s ease,
+        background 0.2s ease;
+}
+
+.nav-link:hover {
+    color: #2563eb;
+
+    background: #eff6ff;
+}
+
+.nav-link.active {
+    color: #2563eb;
+
+    background: #eff6ff;
+
+    font-weight: 600;
+}
+
+
+/* =========================
+   RIGHT
+========================= */
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+
+    gap: 20px;
+}
+
+.navbar-user {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+}
+
+.navbar-avatar {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #dbeafe;
+
+    color: #1d4ed8;
+
+    font-size: 14px;
+
+    font-weight: 700;
+}
+
+.navbar-user-info {
+    display: flex;
+    flex-direction: column;
+
+    gap: 2px;
+}
+
+.navbar-welcome {
+    color: #94a3b8;
+
+    font-size: 11px;
+
+    font-weight: 500;
+}
+
+.navbar-username {
+    max-width: 180px;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+    color: #334155;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+.navbar-logout {
+    height: 38px;
+
+    padding: 0 15px;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 9px;
+
+    background: #ffffff;
+
+    color: #475569;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.navbar-logout:hover {
+    background: #fef2f2;
+
+    color: #dc2626;
+
+    border-color: #fecaca;
+}
+
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 900px) {
+
+    .navbar {
+        padding: 0 20px;
+    }
+
+    .navbar-left {
+        gap: 20px;
+    }
+
+    .navbar-links {
+        gap: 2px;
+    }
+
+    .nav-link {
+        padding: 8px 9px;
+    }
+
+    .navbar-user-info {
+        display: none;
+    }
+
+    .navbar-right {
+        gap: 10px;
+    }
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 640px) {
+
+    .navbar {
+        height: 64px;
+
+        padding: 0 15px;
+    }
+
+    .navbar-left {
+        gap: 8px;
+    }
+
+    .navbar-brand span {
+        display: none;
+    }
+
+    .navbar-logo-icon {
+        width: 36px;
+        height: 36px;
+    }
+
+    .navbar-links {
+        gap: 2px;
+    }
+
+    .nav-link {
+        padding: 7px 8px;
+
+        font-size: 12px;
+    }
+
+    .navbar-right {
+        gap: 7px;
+    }
+
+    .navbar-avatar {
+        width: 34px;
+        height: 34px;
+    }
+
+    .navbar-logout {
+        height: 34px;
+
+        padding: 0 10px;
+
+        font-size: 12px;
+    }
+
+}
+
+
+/* =========================
+   VERY SMALL MOBILE
+========================= */
+
+@media (max-width: 430px) {
+
+    .navbar {
+        padding: 0 10px;
+    }
+
+    .nav-link {
+        padding: 6px;
+
+        font-size: 11px;
+    }
+
+    .navbar-logout {
+        padding: 0 8px;
+    }
+
+}
