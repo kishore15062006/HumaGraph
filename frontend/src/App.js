@@ -1,8 +1,8 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import Navbar from "./components/Navbar";
-import ErrorHandler from "./components/ErrorHandler";
+import Navbar from "../src/components/layout/Navbar";
+import ErrorHandler from "../src/components/ErrorHandler";
 import NotificationStack from "./components/NotificationStack";
 
 import Login from "./pages/Login";
