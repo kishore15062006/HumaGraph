@@ -3,12 +3,11 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import { useSelector } from "react-redux";
 
-import Navbar from "../src/";
-import ErrorHandler from "./components/ErrorHandler";
-import NotificationStack from "./components/NotificationStack";
-
-import Login from "./components/Login";
-import Register from "./components/Register";
+import Navbar from "../src/components/layout/Navbar";
+import ErrorHandler from "../src/components/ErrorHandler";
+import NotificationStack from "../src/components/ErrorHandler";
+import Login from "../src/components/Login";
+import Register from "../src/components/Register";
 
 import AdminDashboard from "./components/AdminDashboard";
 
