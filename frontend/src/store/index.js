@@ -7,4 +7,5 @@ const index = configureStore({
     }
 });
 
+export { index };
 export default index;
