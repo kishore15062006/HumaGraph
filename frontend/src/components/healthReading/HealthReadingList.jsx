@@ -6,13 +6,13 @@ import {
     deleteReading,
     setSearchQuery,
     setFilterByStatus,
-} from "../store/slices/healthReadingSlice";
+} from "../../store/";
 
-import SearchFilterBar from "./SearchFilterBar";
-import EmptyState from "./EmptyState";
+import SearchFilterBar from "../common/SearchFilterBar";
+import EmptyState from "../common/EmptyState";
 import HealthReadingForm from "./HealthReadingForm";
 
-import "../styles/HealthComponents.css";
+import "../../styles/HealthComponent.css";
 
 const HealthReadingList = () => {
     const dispatch = useDispatch();
