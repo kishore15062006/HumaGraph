@@ -3,20 +3,17 @@ package com.example.demo.dto;
 public class AuthResponseDto {
 
     private String token;
+    private UserResponseDto user;
 
-    private String email;
+    public AuthResponseDto() {
+    }
 
-    private String role;
+    public AuthResponseDto(
+            String token,
+            UserResponseDto user) {
 
-    public AuthResponseDto(){}
-
-    public AuthResponseDto(String token,
-                           String email,
-                           String role){
-
-        this.token=token;
-        this.email=email;
-        this.role=role;
+        this.token = token;
+        this.user = user;
     }
 
     public String getToken() {
@@ -24,23 +21,14 @@ public class AuthResponseDto {
     }
 
     public void setToken(String token) {
-        this.token=token;
+        this.token = token;
     }
 
-    public String getEmail() {
-        return email;
+    public UserResponseDto getUser() {
+        return user;
     }
 
-    public void setEmail(String email) {
-        this.email=email;
+    public void setUser(UserResponseDto user) {
+        this.user = user;
     }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role=role;
-    }
-
 }
