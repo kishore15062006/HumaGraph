@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import api from "../api/axios";
 import { createGoal, updateGoal } from "../../store/slices/healthGoalSlice";
 
-import "../styles/HealthGoalForm.css";
+import "../../styles/HealthGoalForm.css";
 
 const HealthGoalForm = ({ initialData = null, onClose }) => {
   const dispatch = useDispatch();

@@ -7,7 +7,7 @@ import EmptyState from "./EmptyState";
 import HealthGoalForm from "./HealthGoalForm";
 import CapacityBar from "./CapacityBar";
 
-import "../styles/HealthGoal.css";
+import "../../styles/HealthGoal.css";
 
 const HealthGoalList = () => {
   const dispatch = useDispatch();

@@ -7,7 +7,7 @@ import {
 } from "../../store/slices/healthReadingSlice";
 import api from "../services/api";
 
-import "../styles/HealthForm.css";
+import "../../styles/HealthForm.css";
 
 const HealthReadingForm = ({ initialData, onClose }) => {
   const dispatch = useDispatch();
