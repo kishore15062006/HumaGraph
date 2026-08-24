@@ -12,7 +12,7 @@ import healthReadingService from "../../services/healthReadingService";
 
 import PractitionerGrantForm from "./PractitionerGrantForm";
 
-import "../styles/PractitionerGrantList.css";
+import "../../styles/PractitionerGrantList.css";
 
 const PractitionerGrantList = () => {
   const dispatch = useDispatch();
