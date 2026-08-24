@@ -5,7 +5,7 @@ import {
   createReading,
   updateReading,
 } from "../../store/slices/healthReadingSlice";
-import api from "../services/api";
+import api from "../../services/api";
 
 import "../../styles/HealthForm.css";
 
