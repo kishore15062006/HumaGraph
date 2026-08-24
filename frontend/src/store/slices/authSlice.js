@@ -1,192 +1,204 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import authService from "../../services/authService";
 
-const API_URL = "http://localhost:8080/api";
-
-// =====================================================
-// LOGIN
-// =====================================================
-
-export const login = createAsyncThunk(
-  "auth/login",
-  async ({ email, password }, { rejectWithValue }) => {
-    try {
-      const response = await fetch(`${API_URL}/auth/login`, {
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        return rejectWithValue(data?.error || data?.message || "Login failed");
-      }
-
-      return data;
-    } catch (error) {
-      return rejectWithValue(error.message || "Unable to connect to server");
-    }
-  }
-);
-
-// =====================================================
-// REGISTER
-// =====================================================
-
-export const registerUser = createAsyncThunk(
-  "auth/registerUser",
-  async (formData, { rejectWithValue }) => {
-    try {
-      const response = await fetch(`${API_URL}/auth/register`, {
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify(formData),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        return rejectWithValue(
-          data?.error || data?.message || "Registration failed"
-        );
-      }
-
-      return data;
-    } catch (error) {
-      return rejectWithValue(error.message || "Unable to connect to server");
-    }
-  }
-);
-
-// =====================================================
-// INITIAL STATE
-// =====================================================
-
+// Initial authentication state
 const initialState = {
-  user: JSON.parse(localStorage.getItem("humagraph_user")) || null,
-
-  token: localStorage.getItem("humagraph_token") || null,
-
-  loading: false,
-
-  error: null,
+    user: JSON.parse(localStorage.getItem("humagraph_user")) || null,
+    token: localStorage.getItem("humagraph_token") || null,
+    loading: false,
+    error: null,
+    isAuthenticated:
+        !!localStorage.getItem("humagraph_token"),
 };
 
-// =====================================================
-// AUTH SLICE
-// =====================================================
+
+// LOGIN
+export const login = createAsyncThunk(
+    "auth/login",
+    async (credentials, { rejectWithValue }) => {
+        try {
+            const response = await authService.login(credentials);
+
+            return response;
+        } catch (error) {
+            return rejectWithValue(
+                error.response?.data?.error ||
+                error.response?.data?.message ||
+                error.message ||
+                "Login failed"
+            );
+        }
+    }
+);
+
+
+// REGISTER
+export const registerUser = createAsyncThunk(
+    "auth/register",
+    async (dto, { rejectWithValue }) => {
+        try {
+            const response = await authService.register(dto);
+
+            return response;
+        } catch (error) {
+            return rejectWithValue(
+                error.response?.data?.error ||
+                error.response?.data?.message ||
+                error.message ||
+                "Registration failed"
+            );
+        }
+    }
+);
+
 
 const authSlice = createSlice({
-  name: "auth",
+    name: "auth",
 
-  initialState,
+    initialState,
 
-  reducers: {
-    logout: (state) => {
-      state.user = null;
+    reducers: {
 
-      state.token = null;
+        // Manual login success action
+        loginSuccess: (state, action) => {
 
-      state.error = null;
+            const { user, token } = action.payload;
 
-      localStorage.removeItem("humagraph_token");
+            state.user = user;
+            state.token = token;
+            state.isAuthenticated = true;
+            state.error = null;
 
-      localStorage.removeItem("humagraph_user");
+            localStorage.setItem(
+                "humagraph_token",
+                token
+            );
+
+            localStorage.setItem(
+                "humagraph_user",
+                JSON.stringify(user)
+            );
+        },
+
+
+        // Logout
+        logout: (state) => {
+
+            localStorage.removeItem(
+                "humagraph_token"
+            );
+
+            localStorage.removeItem(
+                "humagraph_user"
+            );
+
+            state.user = null;
+            state.token = null;
+            state.isAuthenticated = false;
+            state.loading = false;
+            state.error = null;
+        },
     },
-  },
 
-  // =================================================
-  // ASYNC THUNKS
-  // =================================================
 
-  extraReducers: (builder) => {
-    // =============================================
-    // LOGIN
-    // =============================================
+    extraReducers: (builder) => {
 
-    builder
+        // =========================
+        // LOGIN
+        // =========================
 
-      .addCase(login.pending, (state) => {
-        state.loading = true;
+        builder
+            .addCase(login.pending, (state) => {
 
-        state.error = null;
-      })
+                state.loading = true;
+                state.error = null;
+            })
 
-      .addCase(login.fulfilled, (state, action) => {
-        state.loading = false;
+            .addCase(login.fulfilled, (state, action) => {
 
-        state.error = null;
+                state.loading = false;
+                state.error = null;
 
-        /*
-         * Adjust these two lines if your backend
-         * returns a different JSON structure.
-         */
+                const { user, token } = action.payload;
 
-        state.token = action.payload.token;
+                state.user = user;
+                state.token = token;
+                state.isAuthenticated = true;
 
-        state.user = action.payload.user;
-      })
+                localStorage.setItem(
+                    "humagraph_token",
+                    token
+                );
 
-      .addCase(login.rejected, (state, action) => {
-        state.loading = false;
+                localStorage.setItem(
+                    "humagraph_user",
+                    JSON.stringify(user)
+                );
+            })
 
-        state.error = action.payload || "Login failed";
-      });
+            .addCase(login.rejected, (state, action) => {
 
-    // =============================================
-    // REGISTER
-    // =============================================
+                state.loading = false;
 
-    builder
+                state.error =
+                    action.payload ||
+                    "Login failed";
 
-      .addCase(registerUser.pending, (state) => {
-        state.loading = true;
+                state.isAuthenticated = false;
+            });
 
-        state.error = null;
-      })
 
-      .addCase(registerUser.fulfilled, (state, action) => {
-        state.loading = false;
+        // =========================
+        // REGISTER
+        // =========================
 
-        state.error = null;
+        builder
+            .addCase(registerUser.pending, (state) => {
 
-        /*
-         * If registration returns user/token,
-         * store them.
-         */
+                state.loading = true;
+                state.error = null;
+            })
 
-        if (action.payload?.token) {
-          state.token = action.payload.token;
-        }
+            .addCase(registerUser.fulfilled, (state, action) => {
 
-        if (action.payload?.user) {
-          state.user = action.payload.user;
-        }
-      })
+                state.loading = false;
+                state.error = null;
 
-      .addCase(registerUser.rejected, (state, action) => {
-        state.loading = false;
+                const { user, token } = action.payload;
 
-        state.error = action.payload || "Registration failed";
-      });
-  },
+                state.user = user;
+                state.token = token;
+                state.isAuthenticated = true;
+
+                localStorage.setItem(
+                    "humagraph_token",
+                    token
+                );
+
+                localStorage.setItem(
+                    "humagraph_user",
+                    JSON.stringify(user)
+                );
+            })
+
+            .addCase(registerUser.rejected, (state, action) => {
+
+                state.loading = false;
+
+                state.error =
+                    action.payload ||
+                    "Registration failed";
+
+                state.isAuthenticated = false;
+            });
+    },
 });
 
-// =====================================================
-// EXPORT
-// =====================================================
 
-export const { logout } = authSlice.actions;
+export const {
+    logout,
+    loginSuccess
+} = authSlice.actions;
+
 
 export default authSlice.reducer;
