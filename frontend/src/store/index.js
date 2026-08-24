@@ -1,11 +1,19 @@
 import { configureStore } from "@reduxjs/toolkit";
-import authReducer from "./slices/authSlice";
 
-const store = configureStore({
+import authReducer from "./slices/authSlice";
+import healthReadingsReducer from "./slices/healthReadingSlice";
+import healthGoalsReducer from "./slices/healthGoalSlice";
+import practitionerGrantsReducer from "./slices/practitionerGrantSlice";
+
+export const index = configureStore({
     reducer: {
-        auth: authReducer
-    }
+        auth: authReducer,
+        healthReadings: healthReadingsReducer,
+        healthGoals: healthGoalsReducer,
+        practitionerGrants: practitionerGrantsReducer,
+    },
 });
 
-export { store };
-export default store;
+export { index };
+export default index;
+
