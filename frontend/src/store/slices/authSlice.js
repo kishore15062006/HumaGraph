@@ -1,9 +1,23 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import authService from "../../services/authService";
 
-// Initial authentication state
+const getStoredUser = () => {
+    const user = localStorage.getItem("humagraph_user");
+
+    if (!user || user === "undefined") {
+        return null;
+    }
+
+    try {
+        return JSON.parse(user);
+    } catch (error) {
+        localStorage.removeItem("humagraph_user");
+        return null;
+    }
+};
+
 const initialState = {
-    user: JSON.parse(localStorage.getItem("humagraph_user")) || null,
+    user: getStoredUser(),
     token: localStorage.getItem("humagraph_token") || null,
     loading: false,
     error: null,
@@ -17,9 +31,7 @@ export const login = createAsyncThunk(
     "auth/login",
     async (credentials, { rejectWithValue }) => {
         try {
-            const response = await authService.login(credentials);
-
-            return response;
+            return await authService.login(credentials);
         } catch (error) {
             return rejectWithValue(
                 error.response?.data?.error ||
@@ -34,12 +46,10 @@ export const login = createAsyncThunk(
 
 // REGISTER
 export const registerUser = createAsyncThunk(
-    "auth/register",
+    "auth/registerUser",
     async (dto, { rejectWithValue }) => {
         try {
-            const response = await authService.register(dto);
-
-            return response;
+            return await authService.register(dto);
         } catch (error) {
             return rejectWithValue(
                 error.response?.data?.error ||
@@ -58,16 +68,22 @@ const authSlice = createSlice({
     initialState,
 
     reducers: {
+        logout: (state) => {
+            localStorage.removeItem("humagraph_token");
+            localStorage.removeItem("humagraph_user");
 
-        // Manual login success action
+            state.user = null;
+            state.token = null;
+            state.isAuthenticated = false;
+            state.error = null;
+        },
+
         loginSuccess: (state, action) => {
-
             const { user, token } = action.payload;
 
             state.user = user;
             state.token = token;
             state.isAuthenticated = true;
-            state.error = null;
 
             localStorage.setItem(
                 "humagraph_token",
@@ -79,43 +95,18 @@ const authSlice = createSlice({
                 JSON.stringify(user)
             );
         },
-
-
-        // Logout
-        logout: (state) => {
-
-            localStorage.removeItem(
-                "humagraph_token"
-            );
-
-            localStorage.removeItem(
-                "humagraph_user"
-            );
-
-            state.user = null;
-            state.token = null;
-            state.isAuthenticated = false;
-            state.loading = false;
-            state.error = null;
-        },
     },
-
 
     extraReducers: (builder) => {
 
-        // =========================
         // LOGIN
-        // =========================
-
         builder
             .addCase(login.pending, (state) => {
-
                 state.loading = true;
                 state.error = null;
             })
 
             .addCase(login.fulfilled, (state, action) => {
-
                 state.loading = false;
                 state.error = null;
 
@@ -137,30 +128,20 @@ const authSlice = createSlice({
             })
 
             .addCase(login.rejected, (state, action) => {
-
                 state.loading = false;
-
                 state.error =
-                    action.payload ||
-                    "Login failed";
-
-                state.isAuthenticated = false;
+                    action.payload || "Login failed";
             });
 
 
-        // =========================
         // REGISTER
-        // =========================
-
         builder
             .addCase(registerUser.pending, (state) => {
-
                 state.loading = true;
                 state.error = null;
             })
 
             .addCase(registerUser.fulfilled, (state, action) => {
-
                 state.loading = false;
                 state.error = null;
 
@@ -182,14 +163,10 @@ const authSlice = createSlice({
             })
 
             .addCase(registerUser.rejected, (state, action) => {
-
                 state.loading = false;
-
                 state.error =
                     action.payload ||
                     "Registration failed";
-
-                state.isAuthenticated = false;
             });
     },
 });
@@ -199,6 +176,5 @@ export const {
     logout,
     loginSuccess
 } = authSlice.actions;
-
 
 export default authSlice.reducer;
