@@ -89,33 +89,33 @@ public class AuthService {
                 authenticationManager.authenticate(
 
                                 new UsernamePasswordAuthenticationToken(
-
                                                 dto.getEmail(),
-
-                                                dto.getPassword()
-
-                                )
-
-                );
+                                                dto.getPassword()));
 
                 UserAccount user = userAccountRepository
-
                                 .findByEmail(dto.getEmail())
+                                .orElseThrow(() -> new RuntimeException(
+                                                "Invalid email or password"));
 
-                                .orElseThrow(() ->
+                BiometricProfile profile = biometricProfileRepository
+                                .findByUserAccountId(user.getId())
+                                .orElse(null);
 
-                                new RuntimeException("Invalid email or password"));
+                String fullName = profile != null
+                                ? profile.getFullName()
+                                : null;
 
                 String token = jwtService.generateToken(user);
 
-                return new AuthResponseDto(
-
-                                token,
-
+                UserResponseDto userDto = new UserResponseDto(
+                                user.getId(),
                                 user.getEmail(),
-
+                                fullName,
                                 user.getRole().name());
 
+                return new AuthResponseDto(
+                                token,
+                                userDto);
         }
 
 }
