@@ -1,0 +1,270 @@
+/* =========================================================
+   PRACTITIONER GRANT FORM
+   ========================================================= */
+
+.grant-form-overlay {
+    position: fixed;
+    inset: 0;
+
+    z-index: 1000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(8, 30, 24, 0.58);
+
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+.grant-form-modal {
+    width: 100%;
+    max-width: 500px;
+
+    overflow: hidden;
+
+    border: 1px solid #e0ebe6;
+
+    border-radius: 22px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 25px 70px rgba(9, 38, 30, 0.25);
+
+    animation: grantModalIn 0.25s ease;
+}
+
+@keyframes grantModalIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.grant-form-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 26px 27px;
+
+    border-bottom: 1px solid #edf2ef;
+}
+
+.grant-form-header h2 {
+    margin: 0;
+
+    color: #173b30;
+
+    font-size: 22px;
+    font-weight: 750;
+
+    letter-spacing: -0.5px;
+}
+
+.grant-form-header p:not(.page-eyebrow) {
+    margin: 7px 0 0;
+
+    max-width: 390px;
+
+    color: #718079;
+
+    font-size: 12px;
+
+    line-height: 1.6;
+}
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.grant-form {
+    display: flex;
+    flex-direction: column;
+
+    gap: 22px;
+
+    padding: 27px;
+}
+
+.grant-form .form-group {
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+.grant-form .form-group label {
+    color: #31453d;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.grant-form .form-group input {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 13px 14px;
+
+    border: 1px solid #dce7e2;
+
+    border-radius: 10px;
+
+    outline: none;
+
+    background: #fbfdfc;
+
+    color: #233b33;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    transition: all 0.2s ease;
+}
+
+.grant-form .form-group input::placeholder {
+    color: #a4afaa;
+}
+
+.grant-form .form-group input:focus {
+    border-color: #43a982;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 0 0 3px rgba(67, 169, 130, 0.12);
+}
+
+.grant-form .form-group input:disabled {
+    opacity: 0.6;
+
+    cursor: not-allowed;
+}
+
+.form-help {
+    color: #89958f;
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.grant-form-actions {
+    display: flex;
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    padding-top: 20px;
+
+    border-top: 1px solid #edf2ef;
+}
+
+.grant-form-actions .btn-primary,
+.grant-form-actions .btn-secondary {
+    min-height: 42px;
+
+    padding: 0 18px;
+
+    border-radius: 10px;
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.grant-form-actions .btn-primary {
+    border: 1px solid #237957;
+
+    background: #237957;
+
+    color: #ffffff;
+}
+
+.grant-form-actions .btn-primary:hover {
+    background: #1c6549;
+
+    transform: translateY(-1px);
+}
+
+.grant-form-actions .btn-secondary {
+    border: 1px solid #dce6e2;
+
+    background: #ffffff;
+
+    color: #52645c;
+}
+
+.grant-form-actions .btn-secondary:hover {
+    background: #f6faf8;
+
+    color: #234f40;
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .grant-form-overlay {
+        align-items: flex-end;
+
+        padding: 0;
+    }
+
+    .grant-form-modal {
+        max-width: none;
+
+        border-radius: 22px 22px 0 0;
+    }
+
+    .grant-form-header {
+        padding: 22px 20px;
+    }
+
+    .grant-form {
+        padding: 22px 20px;
+    }
+
+    .grant-form-actions {
+        flex-direction: column-reverse;
+    }
+
+    .grant-form-actions .btn-primary,
+    .grant-form-actions .btn-secondary {
+        width: 100%;
+    }
+}

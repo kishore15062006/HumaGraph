@@ -1,0 +1,845 @@
+/* =========================================================
+   PRACTITIONER GRANT PAGE
+   ========================================================= */
+
+.practitioner-grants-page {
+    min-height: 100vh;
+
+    padding-bottom: 50px;
+}
+
+/* =========================================================
+   PAGE HEADER
+   ========================================================= */
+
+.grants-page-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    gap: 30px;
+
+    margin-bottom: 25px;
+}
+
+.grants-page-header h1 {
+    margin: 0;
+
+    color: #173b30;
+
+    font-size: 30px;
+    font-weight: 800;
+
+    letter-spacing: -0.8px;
+}
+
+.page-eyebrow {
+    margin: 0 0 7px;
+
+    color: #29926c;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+}
+
+.page-description {
+    max-width: 650px;
+
+    margin: 8px 0 0;
+
+    color: #718079;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+/* =========================================================
+   SUMMARY
+   ========================================================= */
+
+.grant-summary-card {
+    display: flex;
+    align-items: center;
+
+    gap: 15px;
+
+    width: fit-content;
+
+    min-width: 220px;
+
+    margin-bottom: 22px;
+
+    padding: 17px 21px;
+
+    border: 1px solid #e0ebe6;
+
+    border-radius: 15px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 7px 25px rgba(24, 62, 48, 0.05);
+}
+
+.grant-summary-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 42px;
+    height: 42px;
+
+    border-radius: 12px;
+
+    background: #e9f6ef;
+
+    color: #247b58;
+
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.grant-summary-label {
+    display: block;
+
+    margin-bottom: 2px;
+
+    color: #7b8882;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.7px;
+}
+
+.grant-summary-value {
+    color: #1b4637;
+
+    font-size: 22px;
+}
+
+/* =========================================================
+   TABLE CARD
+   ========================================================= */
+
+.grant-table-card {
+    overflow: hidden;
+
+    border: 1px solid #e1ebe7;
+
+    border-radius: 18px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 8px 30px rgba(25, 62, 48, 0.05);
+}
+
+.grant-table-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 20px 22px;
+
+    border-bottom: 1px solid #edf2ef;
+}
+
+.grant-table-header h2 {
+    margin: 0;
+
+    color: #24483c;
+
+    font-size: 16px;
+    font-weight: 750;
+}
+
+.grant-table-header span {
+    display: block;
+
+    margin-top: 4px;
+
+    color: #89958f;
+
+    font-size: 11px;
+}
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.grant-table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+.grant-table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 900px;
+}
+
+.grant-table th {
+    padding: 12px 18px;
+
+    background: #f8fbf9;
+
+    border-bottom: 1px solid #e7efeb;
+
+    color: #7a8881;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    text-align: left;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.8px;
+}
+
+.grant-table td {
+    padding: 16px 18px;
+
+    border-bottom: 1px solid #edf2ef;
+
+    color: #43564e;
+
+    font-size: 12px;
+
+    vertical-align: middle;
+}
+
+.grant-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.grant-table tbody tr {
+    transition: background 0.15s ease;
+}
+
+.grant-table tbody tr:hover {
+    background: #fbfdfc;
+}
+
+/* =========================================================
+   PERSON
+   ========================================================= */
+
+.grant-person {
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+
+    min-width: 180px;
+}
+
+.person-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    width: 36px;
+    height: 36px;
+
+    border-radius: 50%;
+
+    background: #e7f4ed;
+
+    color: #267755;
+
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.grant-person strong {
+    display: block;
+
+    color: #29483d;
+
+    font-size: 12px;
+}
+
+.grant-person small {
+    display: block;
+
+    margin-top: 3px;
+
+    color: #8a9791;
+
+    font-size: 10px;
+}
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 5px 9px;
+
+    border-radius: 20px;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: 0.5px;
+
+    text-transform: uppercase;
+}
+
+.status-green {
+    background: #e5f5ec;
+
+    color: #267653;
+}
+
+.status-amber {
+    background: #fff4da;
+
+    color: #9b7019;
+}
+
+.status-red {
+    background: #fde8e7;
+
+    color: #b34b48;
+}
+
+.status-neutral {
+    background: #eef2f0;
+
+    color: #68766f;
+}
+
+/* =========================================================
+   CLINICAL NOTE
+   ========================================================= */
+
+.clinical-note-readonly {
+    display: block;
+
+    max-width: 220px;
+
+    color: #65756e;
+
+    line-height: 1.5;
+}
+
+.clinical-note-display {
+    max-width: 230px;
+
+    padding: 0;
+
+    border: none;
+
+    background: transparent;
+
+    color: #65756e;
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+
+    text-align: left;
+
+    cursor: pointer;
+}
+
+.clinical-note-display:hover {
+    color: #217955;
+
+    text-decoration: underline;
+}
+
+.note-editor {
+    width: 230px;
+}
+
+.note-editor textarea {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    resize: vertical;
+
+    padding: 8px 9px;
+
+    border: 1px solid #cdded6;
+
+    border-radius: 8px;
+
+    outline: none;
+
+    background: #fbfdfc;
+
+    color: #334b41;
+
+    font-family: inherit;
+
+    font-size: 11px;
+}
+
+.note-editor textarea:focus {
+    border-color: #42a27b;
+
+    box-shadow:
+        0 0 0 3px rgba(66, 162, 123, 0.1);
+}
+
+.note-actions {
+    display: flex;
+
+    gap: 6px;
+
+    margin-top: 6px;
+}
+
+.note-save,
+.note-cancel {
+    padding: 5px 9px;
+
+    border-radius: 6px;
+
+    font-family: inherit;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.note-save {
+    border: none;
+
+    background: #237957;
+
+    color: white;
+}
+
+.note-cancel {
+    border: 1px solid #dce5e1;
+
+    background: white;
+
+    color: #63736c;
+}
+
+/* =========================================================
+   DATE
+   ========================================================= */
+
+.granted-date {
+    color: #718078;
+
+    font-size: 11px;
+
+    white-space: nowrap;
+}
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.grant-actions {
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+}
+
+.grant-action-group {
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+}
+
+.grant-action {
+    padding: 7px 10px;
+
+    border-radius: 7px;
+
+    font-family: inherit;
+
+    font-size: 10px;
+    font-weight: 750;
+
+    cursor: pointer;
+
+    white-space: nowrap;
+
+    transition: all 0.18s ease;
+}
+
+.grant-approve {
+    border: 1px solid #bfe2ce;
+
+    background: #eaf7f0;
+
+    color: #267453;
+}
+
+.grant-approve:hover {
+    background: #d9f1e4;
+}
+
+.grant-revoke {
+    border: 1px solid #f0d0cf;
+
+    background: #fff4f3;
+
+    color: #a74a47;
+}
+
+.grant-revoke:hover {
+    background: #fde7e6;
+}
+
+.grant-remove {
+    border: 1px solid #e3d0d0;
+
+    background: #fff8f8;
+
+    color: #a04d4a;
+}
+
+.grant-remove:hover {
+    background: #fdeaea;
+}
+
+.grant-view {
+    border: 1px solid #bedfd0;
+
+    background: #edf8f2;
+
+    color: #237453;
+}
+
+.grant-view:hover {
+    background: #def1e7;
+}
+
+.grant-request {
+    border: 1px solid #c8dfd4;
+
+    background: #f0f8f4;
+
+    color: #287554;
+}
+
+.grant-request:hover {
+    background: #e0f2e8;
+}
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.grant-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 70px 20px;
+
+    text-align: center;
+}
+
+.empty-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 55px;
+    height: 55px;
+
+    margin-bottom: 14px;
+
+    border-radius: 50%;
+
+    background: #eef7f2;
+
+    color: #37916b;
+
+    font-size: 26px;
+}
+
+.grant-empty-state h3 {
+    margin: 0 0 6px;
+
+    color: #315146;
+
+    font-size: 15px;
+}
+
+.grant-empty-state p {
+    max-width: 420px;
+
+    margin: 0;
+
+    color: #89958f;
+
+    font-size: 12px;
+
+    line-height: 1.6;
+}
+
+/* =========================================================
+   PATIENT VIEWER MODAL
+   ========================================================= */
+
+.patient-viewer-overlay {
+    position: fixed;
+    inset: 0;
+
+    z-index: 1100;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(8, 30, 24, 0.6);
+
+    backdrop-filter: blur(6px);
+}
+
+.patient-viewer-modal {
+    width: 100%;
+    max-width: 950px;
+
+    max-height: 88vh;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+
+    border: 1px solid #dfebe5;
+
+    border-radius: 20px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 25px 70px rgba(9, 38, 30, 0.27);
+}
+
+.patient-viewer-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    padding: 24px 27px;
+
+    border-bottom: 1px solid #edf2ef;
+}
+
+.patient-viewer-header h2 {
+    margin: 0;
+
+    color: #1c4436;
+
+    font-size: 20px;
+}
+
+.patient-viewer-header p:not(.page-eyebrow) {
+    margin: 5px 0 0;
+
+    color: #84918b;
+
+    font-size: 11px;
+}
+
+.modal-close-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 34px;
+    height: 34px;
+
+    border: 1px solid #dce7e2;
+
+    border-radius: 9px;
+
+    background: #f8faf9;
+
+    color: #66766f;
+
+    font-size: 22px;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.modal-close-button:hover {
+    background: #edf6f1;
+
+    color: #236249;
+}
+
+/* =========================================================
+   PATIENT READINGS
+   ========================================================= */
+
+.patient-reading-content {
+    flex: 1;
+
+    overflow: auto;
+
+    padding: 20px 25px;
+}
+
+.patient-reading-table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+.patient-reading-table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 650px;
+}
+
+.patient-reading-table th {
+    padding: 11px 14px;
+
+    background: #f8fbf9;
+
+    border-bottom: 1px solid #e4ede8;
+
+    color: #7a8881;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    text-align: left;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.7px;
+}
+
+.patient-reading-table td {
+    padding: 13px 14px;
+
+    border-bottom: 1px solid #edf2ef;
+
+    color: #53655e;
+
+    font-size: 11px;
+}
+
+.patient-reading-table td strong {
+    color: #2d4b40;
+}
+
+.reading-loading,
+.reading-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 180px;
+
+    color: #829089;
+
+    font-size: 12px;
+}
+
+/* =========================================================
+   MODAL FOOTER
+   ========================================================= */
+
+.patient-viewer-footer {
+    display: flex;
+    justify-content: flex-end;
+
+    padding: 15px 25px;
+
+    border-top: 1px solid #edf2ef;
+
+    background: #fbfdfc;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 800px) {
+
+    .grants-page-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .grants-page-header .btn-primary {
+        width: 100%;
+    }
+
+    .grant-summary-card {
+        width: 100%;
+
+        box-sizing: border-box;
+    }
+
+    .patient-viewer-overlay {
+        align-items: flex-end;
+
+        padding: 0;
+    }
+
+    .patient-viewer-modal {
+        max-height: 94vh;
+
+        border-radius: 20px 20px 0 0;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .grants-page-header h1 {
+        font-size: 25px;
+    }
+
+    .grant-table-header {
+        padding: 17px;
+    }
+
+    .patient-viewer-header {
+        padding: 20px;
+    }
+
+    .patient-reading-content {
+        padding: 15px;
+    }
+
+    .patient-viewer-footer {
+        padding: 13px 15px;
+    }
+}
