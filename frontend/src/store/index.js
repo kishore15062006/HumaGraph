@@ -5,7 +5,7 @@ import healthReadingsReducer from "./slices/healthReadingSlice";
 import healthGoalsReducer from "./slices/healthGoalSlice";
 import practitionerGrantsReducer from "./slices/practitionerGrantSlice";
 
-export const index = configureStore({
+const store = configureStore({
     reducer: {
         auth: authReducer,
         healthReadings: healthReadingsReducer,
@@ -14,6 +14,5 @@ export const index = configureStore({
     },
 });
 
-export { index };
-export default index;
-
+export { store };
+export default store;
