@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { fetchGoals, deleteGoal } from "../store/slices/healthGoalSlice";
+import { fetchGoals, deleteGoal } from "../../store/slices/healthGoalSlice";
 
 import EmptyState from "./EmptyState";
 import HealthGoalForm from "./HealthGoalForm";

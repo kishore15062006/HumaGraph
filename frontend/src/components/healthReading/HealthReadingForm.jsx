@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import {
   createReading,
   updateReading,
-} from "../store/slices/healthReadingSlice";
+} from "../../store/slices/healthReadingSlice";
 import api from "../services/api";
 
 import "../styles/HealthForm.css";
