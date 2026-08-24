@@ -1,0 +1,477 @@
+/* =========================================================
+   HEALTH GOALS PAGE
+   ========================================================= */
+
+.page-container {
+    min-height: calc(100vh - 72px);
+
+    padding: 40px 5%;
+
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(52, 211, 153, 0.07),
+            transparent 30%
+        ),
+        #f7faf9;
+}
+
+/* =========================================================
+   PAGE HEADER
+   ========================================================= */
+
+.goals-page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 25px;
+
+    margin-bottom: 28px;
+
+    padding: 32px 36px;
+
+    border-radius: 22px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0f2f27,
+            #1b5544
+        );
+
+    color: #ffffff;
+
+    box-shadow:
+        0 18px 45px rgba(15, 47, 39, 0.15);
+}
+
+.goals-eyebrow {
+    margin: 0 0 7px;
+
+    color: #67dca9;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    letter-spacing: 1.7px;
+}
+
+.goals-page-header h1 {
+    margin: 0 0 8px;
+
+    color: #ffffff;
+
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 750;
+
+    letter-spacing: -1px;
+}
+
+.goals-page-header p:last-child {
+    margin: 0;
+
+    max-width: 600px;
+
+    color: rgba(255, 255, 255, 0.7);
+
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* =========================================================
+   PRIMARY BUTTON
+   ========================================================= */
+
+.goals-page-header .btn-primary {
+    flex-shrink: 0;
+
+    min-height: 44px;
+
+    padding: 0 20px;
+
+    border: none;
+    border-radius: 11px;
+
+    background: #ffffff;
+
+    color: #17503e;
+
+    font-family: inherit;
+
+    font-size: 12px;
+    font-weight: 750;
+
+    cursor: pointer;
+
+    box-shadow: none;
+
+    transition: all 0.2s ease;
+}
+
+.goals-page-header .btn-primary:hover {
+    background: #effaf5;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, 0.14);
+}
+
+/* =========================================================
+   SUCCESS MESSAGE
+   ========================================================= */
+
+.goal-success-message,
+.goal-error-message {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 18px;
+
+    padding: 13px 16px;
+
+    border-radius: 11px;
+
+    font-size: 13px;
+    font-weight: 650;
+}
+
+.goal-success-message {
+    border: 1px solid #c8ead9;
+
+    background: #edfaf3;
+
+    color: #207451;
+}
+
+.goal-success-message span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 20px;
+    height: 20px;
+
+    border-radius: 50%;
+
+    background: #d5f1e3;
+
+    font-size: 11px;
+}
+
+.goal-error-message {
+    border: 1px solid #f0d1d1;
+
+    background: #fff5f5;
+
+    color: #a84545;
+}
+
+/* =========================================================
+   TABLE CARD
+   ========================================================= */
+
+.goals-table-card {
+    overflow: hidden;
+
+    border: 1px solid #e3ebe7;
+    border-radius: 18px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 8px 30px rgba(15, 47, 39, 0.05);
+}
+
+.goals-table-scroll {
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+.health-goals-table {
+    width: 100%;
+
+    min-width: 950px;
+
+    border-collapse: collapse;
+}
+
+/* =========================================================
+   TABLE HEADER
+   ========================================================= */
+
+.health-goals-table th {
+    padding: 15px 18px;
+
+    border-bottom: 1px solid #e8eeeb;
+
+    background: #f8faf9;
+
+    color: #728079;
+
+    font-size: 10px;
+    font-weight: 750;
+
+    letter-spacing: 0.8px;
+
+    text-align: left;
+
+    text-transform: uppercase;
+}
+
+/* =========================================================
+   TABLE BODY
+   ========================================================= */
+
+.health-goals-table td {
+    padding: 18px;
+
+    border-bottom: 1px solid #edf1ef;
+
+    color: #35443e;
+
+    font-size: 13px;
+
+    vertical-align: middle;
+}
+
+.health-goals-table tbody tr {
+    transition: background 0.15s ease;
+}
+
+.health-goals-table tbody tr:hover {
+    background: #f9fcfa;
+}
+
+.health-goals-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.goal-metric-name {
+    display: block;
+
+    color: #173d31;
+
+    font-size: 13px;
+    font-weight: 750;
+}
+
+.goal-unit {
+    color: #87948e;
+
+    font-size: 11px;
+}
+
+/* =========================================================
+   DATE
+   ========================================================= */
+
+.goal-date {
+    color: #697871;
+
+    white-space: nowrap;
+}
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 6px 10px;
+
+    border-radius: 999px;
+
+    font-size: 10px;
+    font-weight: 750;
+
+    white-space: nowrap;
+}
+
+.status-green {
+    background: #e5f7ee;
+
+    color: #16724d;
+}
+
+.status-amber {
+    background: #fff4dc;
+
+    color: #9a6a12;
+}
+
+/* =========================================================
+   PROGRESS
+   ========================================================= */
+
+.goal-progress-cell {
+    min-width: 150px;
+}
+
+.goal-progress-text {
+    display: block;
+
+    margin-top: 6px;
+
+    color: #718078;
+
+    font-size: 10px;
+    font-weight: 700;
+}
+
+/*
+   If CapacityBar doesn't already have its own styling,
+   these styles provide a compatible progress appearance.
+*/
+
+.capacity-bar {
+    width: 100%;
+
+    height: 7px;
+
+    overflow: hidden;
+
+    border-radius: 999px;
+
+    background: #e8efeb;
+}
+
+.capacity-bar-fill {
+    height: 100%;
+
+    border-radius: inherit;
+
+    background: #29926c;
+
+    transition: width 0.5s ease;
+}
+
+/* =========================================================
+   ACTION BUTTONS
+   ========================================================= */
+
+.goal-actions {
+    display: flex;
+
+    gap: 7px;
+}
+
+.goal-edit-button,
+.goal-delete-button {
+    padding: 7px 11px;
+
+    border-radius: 8px;
+
+    font-family: inherit;
+
+    font-size: 11px;
+    font-weight: 650;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.goal-edit-button {
+    border: 1px solid #d3e2db;
+
+    background: #ffffff;
+
+    color: #245747;
+}
+
+.goal-edit-button:hover {
+    background: #eef7f2;
+
+    border-color: #bcd6ca;
+}
+
+.goal-delete-button {
+    border: 1px solid #efd3d3;
+
+    background: #ffffff;
+
+    color: #b34848;
+}
+
+.goal-delete-button:hover {
+    background: #fff2f2;
+
+    border-color: #e6bcbc;
+}
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.goals-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 250px;
+
+    border: 1px solid #e3ebe7;
+    border-radius: 18px;
+
+    background: #ffffff;
+
+    color: #718078;
+
+    font-size: 14px;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    .page-container {
+        padding: 25px 4%;
+    }
+
+    .goals-page-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        padding: 27px 24px;
+
+        border-radius: 18px;
+    }
+
+    .goals-page-header .btn-primary {
+        width: 100%;
+    }
+
+    .goals-table-card {
+        border-radius: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .page-container {
+        padding: 18px 14px;
+    }
+
+    .goals-page-header {
+        padding: 23px 20px;
+    }
+
+    .goals-page-header h1 {
+        font-size: 28px;
+    }
+
+    .health-goals-table th,
+    .health-goals-table td {
+        padding: 13px 14px;
+    }
+}
