@@ -13,10 +13,10 @@ const HealthGoalList = () => {
   const dispatch = useDispatch();
 
   const {
-    goals = [],
+    items: goals = [],
     loading,
     error,
-  } = useSelector((state) => state.healthGoal);
+  } = useSelector((state) => state.healthGoals || {});
 
   const [editingGoal, setEditingGoal] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");

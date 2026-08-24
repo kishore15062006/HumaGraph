@@ -18,7 +18,9 @@ const PractitionerGrantList = () => {
   const dispatch = useDispatch();
 
   const auth = useSelector((state) => state.auth);
-  const grants = useSelector((state) => state.practitionerGrant?.grants || []);
+  const grants = useSelector(
+  (state) => state.practitionerGrants?.items || []
+);
 
   const user = auth?.user;
 
