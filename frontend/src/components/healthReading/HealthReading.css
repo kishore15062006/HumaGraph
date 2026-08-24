@@ -1,0 +1,313 @@
+/* =========================================================
+   HEALTH READING FORM MODAL
+   ========================================================= */
+
+.health-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(8, 30, 24, 0.58);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+
+    animation: healthOverlayIn 0.2s ease;
+}
+
+@keyframes healthOverlayIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.health-form-modal {
+    width: 100%;
+    max-width: 520px;
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    border: 1px solid #e0ebe6;
+    border-radius: 22px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 25px 70px rgba(9, 38, 30, 0.25);
+
+    animation: healthModalIn 0.25s ease;
+}
+
+@keyframes healthModalIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.health-form-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    padding: 25px 27px;
+
+    border-bottom: 1px solid #edf2ef;
+}
+
+.form-eyebrow {
+    margin: 0 0 6px;
+
+    color: #29926c;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+}
+
+.health-form-header h2 {
+    margin: 0;
+
+    color: #173b30;
+
+    font-size: 22px;
+    font-weight: 750;
+
+    letter-spacing: -0.5px;
+}
+
+.modal-close-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 34px;
+    height: 34px;
+
+    border: 1px solid #e0e9e5;
+    border-radius: 9px;
+
+    background: #f8faf9;
+
+    color: #617169;
+
+    font-size: 23px;
+    line-height: 1;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.modal-close-button:hover {
+    background: #edf6f1;
+    color: #1c5b46;
+
+    transform: rotate(90deg);
+}
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.health-reading-form {
+    display: flex;
+    flex-direction: column;
+
+    gap: 19px;
+
+    padding: 27px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+.form-group label {
+    color: #31453d;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 12px 13px;
+
+    border: 1px solid #dce7e2;
+    border-radius: 10px;
+
+    outline: none;
+
+    background: #fbfdfc;
+
+    color: #233b33;
+
+    font-family: inherit;
+    font-size: 13px;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.form-group input::placeholder {
+    color: #a4afaa;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #43a982;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 0 0 3px rgba(67, 169, 130, 0.12);
+}
+
+.form-group input:hover,
+.form-group select:hover {
+    border-color: #b9d2c7;
+}
+
+.form-group select {
+    cursor: pointer;
+}
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.health-form-actions {
+    display: flex;
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    margin-top: 8px;
+    padding-top: 20px;
+
+    border-top: 1px solid #edf2ef;
+}
+
+.btn-primary,
+.btn-secondary {
+    min-height: 42px;
+
+    padding: 0 18px;
+
+    border-radius: 10px;
+
+    font-family: inherit;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    border: 1px solid #237957;
+
+    background: #237957;
+
+    color: #ffffff;
+
+    box-shadow:
+        0 5px 14px rgba(35, 121, 87, 0.18);
+}
+
+.btn-primary:hover {
+    background: #1c6549;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 8px 18px rgba(35, 121, 87, 0.25);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-secondary {
+    border: 1px solid #dce6e2;
+
+    background: #ffffff;
+
+    color: #52645c;
+}
+
+.btn-secondary:hover {
+    border-color: #c4d7cf;
+
+    background: #f6faf8;
+
+    color: #234f40;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 600px) {
+    .health-modal-overlay {
+        align-items: flex-end;
+
+        padding: 0;
+    }
+
+    .health-form-modal {
+        max-width: none;
+
+        max-height: 94vh;
+
+        border-radius: 22px 22px 0 0;
+    }
+
+    .health-form-header {
+        padding: 22px 20px;
+    }
+
+    .health-reading-form {
+        padding: 22px 20px;
+    }
+
+    .health-form-actions {
+        flex-direction: column-reverse;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        width: 100%;
+    }
+}
