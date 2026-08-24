@@ -53,7 +53,7 @@ public class AuthService {
                 user.setPasswordHash(
                                 passwordEncoder.encode(dto.getPassword()));
 
-                user.setRole(UserAccount.UserRole.INDIVIDUAL);
+                user.setRole(UserAccount.UserRole.valueOf(dto.getRole()));
 
                 user.setActive(true);
 
