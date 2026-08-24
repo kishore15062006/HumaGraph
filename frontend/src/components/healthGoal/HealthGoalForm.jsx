@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 import api from "../api/axios";
-import { createGoal, updateGoal } from "../store/slices/healthGoalSlice";
+import { createGoal, updateGoal } from "../../store/slices/healthGoalSlice";
 
 import "../styles/HealthGoalForm.css";
 
