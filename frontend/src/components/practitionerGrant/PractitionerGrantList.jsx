@@ -7,8 +7,8 @@ import {
   deleteGrant,
 } from "../../store/slices/practitionerGrantSlice";
 
-import practitionerGrantService from "../services/practitionerGrantService";
-import healthReadingService from "../services/healthReadingService";
+import practitionerGrantService from "../../services/practitionerGrantService";
+import healthReadingService from "../../services/healthReadingService";
 
 import PractitionerGrantForm from "./PractitionerGrantForm";
 

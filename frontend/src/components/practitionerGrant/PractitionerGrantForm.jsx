@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 
-import practitionerGrantService from "../services/practitionerGrantService";
+import practitionerGrantService from "../../services/practitionerGrantService";
 import { fetchGrants } from "../../store/slices/practitionerGrantSlice";
 
 import "../styles/PractitionerGrantForm.css";
