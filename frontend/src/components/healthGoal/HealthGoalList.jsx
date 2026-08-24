@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { fetchGoals, deleteGoal } from "../../store/slices/healthGoalSlice";
 
-import EmptyState from "./EmptyState";
+import EmptyState from "../common/EmptyState";
 import HealthGoalForm from "./HealthGoalForm";
-import CapacityBar from "./CapacityBar";
+import CapacityBar from "../common/CapacityBar";
 
 import "../../styles/HealthGoal.css";
 
