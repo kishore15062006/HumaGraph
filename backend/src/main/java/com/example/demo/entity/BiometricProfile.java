@@ -18,7 +18,7 @@ public class BiometricProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "user_account_id", nullable = false, unique = true)
     private UserAccount userAccount;
     @Column(nullable = false)
