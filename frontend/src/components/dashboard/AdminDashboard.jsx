@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import api from "../../services/api";
 import StatCards from "./StatCard";
+import "./AdminDashboard.css"
 
 const AdminDashboard = () => {
   const [users, setUsers] = useState([]);
