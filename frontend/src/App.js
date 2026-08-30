@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate,Link } from "react-router-dom";
 
 import { useSelector } from "react-redux";
 
@@ -194,19 +194,32 @@ const PractitionerDashboard = ({ user }) => {
 
 const DashboardNavigationCard = ({ title, description, link, icon }) => {
   return (
-    <div className="dashboard-card navigation-card">
-      <div className="navigation-card-icon">{icon}</div>
+    <Link
+      to={link}
+      className="dashboard-navigation-card"
+      aria-label={`Open ${title}`}
+    >
+      <div className="dashboard-navigation-icon">
+        {icon}
+      </div>
 
-      <div>
-        <h2>{title}</h2>
+      <div className="dashboard-navigation-content">
+        <h3>{title}</h3>
 
         <p>{description}</p>
-
-        <a href={link} className="primary-health-button">
-          Open
-        </a>
       </div>
-    </div>
+
+      <div className="dashboard-navigation-footer">
+        <span>Open module</span>
+
+        <span
+          className="dashboard-navigation-arrow"
+          aria-hidden="true"
+        >
+          →
+        </span>
+      </div>
+    </Link>
   );
 };
 
