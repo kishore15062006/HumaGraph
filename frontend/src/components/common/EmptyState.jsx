@@ -1,4 +1,6 @@
 import React from "react";
+import "./common.css" 
+
 
 const EmptyState = ({
   message = "No data found.",
@@ -29,4 +31,4 @@ const EmptyState = ({
   );
 };
 
-export default EmptyState;
+export default Em
