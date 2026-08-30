@@ -31,4 +31,4 @@ const EmptyState = ({
   );
 };
 
-export default Em
+export default EmptyState;
