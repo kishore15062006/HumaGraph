@@ -1584,6 +1584,7 @@
        ======================================================== -->
   <script>
     // Global Application State
+    // Global Application State
     window.AppState = {
       user: null,
       token: null,
@@ -1597,49 +1598,428 @@
       activeAdminTab: "users"
     };
 
-    const API_BASE = "http://localhost:8080/api";
+    // --------------------------------------------------------
+    // LOCAL MOCK DATABASE INITIALIZER
+    // --------------------------------------------------------
+    function initMockDatabase() {
+      if (!localStorage.getItem("mock_db_initialized")) {
+        const defaultMetrics = [
+          { id: 1, name: "Heart Rate", unit: "bpm", category: "CARDIO" },
+          { id: 2, name: "Blood Pressure", unit: "mmHg", category: "CARDIO" },
+          { id: 3, name: "Blood Glucose", unit: "mg/dL", category: "METABOLIC" },
+          { id: 4, name: "Body Weight", unit: "kg", category: "FITNESS" },
+          { id: 5, name: "Sleep Duration", unit: "hours", category: "SLEEP" }
+        ];
+
+        const defaultUsers = [
+          { id: 1, email: "admin@example.com", password: "admin123", role: "ADMIN", isActive: true, fullName: "System Admin" },
+          { id: 2, email: "patient@example.com", password: "patient123", role: "INDIVIDUAL", isActive: true, fullName: "Kishore Kumar", dateOfBirth: "2006-06-15" },
+          { id: 3, email: "doctor@example.com", password: "doctor123", role: "PRACTITIONER", isActive: true, fullName: "Dr. Sarah Jenkins" }
+        ];
+
+        const defaultReadings = [
+          { id: 101, metricId: 1, metricName: "Heart Rate", unit: "bpm", numericValue: 72, recordedAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), source: "MANUAL", status: "NORMAL", patientEmail: "patient@example.com" },
+          { id: 102, metricId: 3, metricName: "Blood Glucose", unit: "mg/dL", numericValue: 110, recordedAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(), source: "MANUAL", status: "NORMAL", patientEmail: "patient@example.com" },
+          { id: 103, metricId: 2, metricName: "Blood Pressure", unit: "mmHg", numericValue: 145, recordedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(), source: "DEVICE", status: "OUT_OF_BOUNDS", patientEmail: "patient@example.com" }
+        ];
+
+        const defaultGoals = [
+          { id: 201, metricId: 4, metricName: "Body Weight", metricUnit: "kg", targetValue: 70, currentValue: 78, targetDate: "2026-12-31", status: "IN_PROGRESS", patientEmail: "patient@example.com" },
+          { id: 202, metricId: 1, metricName: "Heart Rate", metricUnit: "bpm", targetValue: 65, currentValue: 72, targetDate: "2026-10-15", status: "IN_PROGRESS", patientEmail: "patient@example.com" }
+        ];
+
+        const defaultGrants = [
+          { id: 301, patientEmail: "patient@example.com", patientName: "Kishore Kumar", patientProfileId: "patient_profile_2", practitionerEmail: "doctor@example.com", practitionerName: "Dr. Sarah Jenkins", status: "REQUESTED", clinicalNote: "Please share your last month glucose readings.", grantedAt: null }
+        ];
+
+        localStorage.setItem("mock_metrics", JSON.stringify(defaultMetrics));
+        localStorage.setItem("mock_users", JSON.stringify(defaultUsers));
+        localStorage.setItem("mock_readings", JSON.stringify(defaultReadings));
+        localStorage.setItem("mock_goals", JSON.stringify(defaultGoals));
+        localStorage.setItem("mock_grants", JSON.stringify(defaultGrants));
+        localStorage.setItem("mock_db_initialized", "true");
+      }
+    }
 
     // --------------------------------------------------------
-    // API NETWORK REQUEST HELPER
+    // API NETWORK REQUEST HELPER (MOCKED TO LOCALSTORAGE)
     // --------------------------------------------------------
     async function apiRequest(endpoint, options = {}) {
-      const token = localStorage.getItem("humagraph_token");
-      options.headers = {
-        "Content-Type": "application/json",
-        ...options.headers,
+      // Simulate network latency for natural user experience
+      await new Promise(resolve => setTimeout(resolve, 200));
+
+      initMockDatabase();
+
+      const user = JSON.parse(localStorage.getItem("humagraph_user") || "null");
+      const body = options.body ? JSON.parse(options.body) : null;
+      
+      let users = JSON.parse(localStorage.getItem("mock_users") || "[]");
+      let metrics = JSON.parse(localStorage.getItem("mock_metrics") || "[]");
+      let readings = JSON.parse(localStorage.getItem("mock_readings") || "[]");
+      let goals = JSON.parse(localStorage.getItem("mock_goals") || "[]");
+      let grants = JSON.parse(localStorage.getItem("mock_grants") || "[]");
+
+      const method = (options.method || "GET").toUpperCase();
+      const saveState = (key, data) => localStorage.setItem(key, JSON.stringify(data));
+
+      // Robust helper to extract numeric ID anywhere in the endpoint path
+      const extractIdFromPath = (path) => {
+        const matches = path.match(/\/(\d+)(?:\/|$)/);
+        return matches ? Number(matches[1]) : null;
       };
-      if (token) {
-        options.headers["Authorization"] = `Bearer ${token}`;
+
+      // --- ENDPOINT: /auth/login (POST) ---
+      if (endpoint === "/auth/login" && method === "POST") {
+        const found = users.find(u => u.email === body.email && u.password === body.password);
+        if (!found) {
+          throw new Error("Invalid email or password");
+        }
+        if (!found.isActive) {
+          throw new Error("Account has been deactivated. Please contact support.");
+        }
+        const token = "mock_jwt_token_for_" + found.email;
+        return { user: found, token };
       }
 
-      try {
-        const response = await fetch(`${API_BASE}${endpoint}`, options);
+      // --- ENDPOINT: /auth/register (POST) ---
+      if (endpoint === "/auth/register" && method === "POST") {
+        const found = users.find(u => u.email === body.email);
+        if (found) {
+          throw new Error("Email address already registered");
+        }
+        const newUser = {
+          id: Date.now(),
+          email: body.email,
+          password: body.password,
+          role: body.role || "INDIVIDUAL",
+          isActive: true,
+          fullName: body.fullName || body.email.split("@")[0],
+          dateOfBirth: body.dateOfBirth || "1990-01-01"
+        };
+        users.push(newUser);
+        saveState("mock_users", users);
+        const token = "mock_jwt_token_for_" + newUser.email;
+        return { user: newUser, token };
+      }
+
+      // Token authentication check for all other API endpoints
+      if (!user) {
+        throw new Error("Unauthorized");
+      }
+
+      // --- ENDPOINT: /metrics (GET) ---
+      if (endpoint === "/metrics" && method === "GET") {
+        return metrics;
+      }
+
+      // --- ENDPOINT: /readings (GET, POST) ---
+      if (endpoint === "/readings") {
+        if (method === "GET") {
+          if (user.role === "INDIVIDUAL") {
+            return readings.filter(r => r.patientEmail === user.email);
+          }
+          if (user.role === "PRACTITIONER") {
+            const connectedEmails = grants
+              .filter(g => g.practitionerEmail === user.email && g.status === "ACTIVE")
+              .map(g => g.patientEmail);
+            return readings.filter(r => connectedEmails.includes(r.patientEmail));
+          }
+          return readings;
+        }
+
+        if (method === "POST") {
+          const metric = metrics.find(m => m.id === body.metricId);
+          if (!metric) throw new Error("Metric standard not found");
+          
+          let status = "NORMAL";
+          if (metric.name === "Heart Rate" && (body.numericValue < 55 || body.numericValue > 110)) status = "OUT_OF_BOUNDS";
+          if (metric.name === "Blood Pressure" && (body.numericValue < 90 || body.numericValue > 139)) status = "OUT_OF_BOUNDS";
+          if (metric.name === "Blood Glucose" && (body.numericValue < 70 || body.numericValue > 140)) status = "OUT_OF_BOUNDS";
+          if (metric.name === "Body Weight" && body.numericValue > 150) status = "OUT_OF_BOUNDS";
+
+          const newReading = {
+            id: Date.now(),
+            metricId: body.metricId,
+            metricName: metric.name,
+            unit: metric.unit,
+            numericValue: body.numericValue,
+            recordedAt: body.recordedAt || new Date().toISOString(),
+            source: body.source || "MANUAL",
+            status: status,
+            patientEmail: user.email,
+            patientProfileId: "patient_profile_" + user.id
+          };
+
+          readings.unshift(newReading);
+          saveState("mock_readings", readings);
+
+          // Update goals currentValue
+          goals.forEach(g => {
+            if (g.patientEmail === user.email && g.metricId === body.metricId) {
+              g.currentValue = body.numericValue;
+              if (Number(g.targetValue) === Number(g.currentValue)) {
+                g.status = "ACHIEVED";
+              }
+            }
+          });
+          saveState("mock_goals", goals);
+
+          return newReading;
+        }
+      }
+
+      // --- ENDPOINT: /readings/{id} (PUT, DELETE) ---
+      if (endpoint.startsWith("/readings/") && !endpoint.includes("/patient/")) {
+        const id = extractIdFromPath(endpoint);
+        const index = readings.findIndex(r => String(r.id) === String(id));
         
-        // 401 Unauthorized Interceptor
-        if (response.status === 401) {
-          localStorage.removeItem("humagraph_token");
-          localStorage.removeItem("humagraph_user");
-          window.AppState.user = null;
-          window.AppState.token = null;
-          window.location.hash = "#/login";
-          showToast("Session expired. Please sign in again.", "fa-circle-exmark", "rose");
-          throw new Error("Unauthorized");
+        if (index === -1) throw new Error("Reading not found");
+
+        if (method === "DELETE") {
+          readings.splice(index, 1);
+          saveState("mock_readings", readings);
+          return "Reading deleted successfully";
         }
 
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({}));
-          throw new Error(errorData.error || errorData.message || `Request failed with status ${response.status}`);
-        }
+        if (method === "PUT") {
+          const metric = metrics.find(m => m.id === body.metricId);
+          if (!metric) throw new Error("Metric standard not found");
+          
+          let status = "NORMAL";
+          if (metric.name === "Heart Rate" && (body.numericValue < 55 || body.numericValue > 110)) status = "OUT_OF_BOUNDS";
+          if (metric.name === "Blood Pressure" && (body.numericValue < 90 || body.numericValue > 139)) status = "OUT_OF_BOUNDS";
+          if (metric.name === "Blood Glucose" && (body.numericValue < 70 || body.numericValue > 140)) status = "OUT_OF_BOUNDS";
 
-        const contentType = response.headers.get("content-type");
-        if (contentType && contentType.includes("application/json")) {
-          return await response.json();
+          readings[index] = {
+            ...readings[index],
+            metricId: body.metricId,
+            metricName: metric.name,
+            unit: metric.unit,
+            numericValue: body.numericValue,
+            recordedAt: body.recordedAt,
+            source: body.source,
+            status: status
+          };
+
+          saveState("mock_readings", readings);
+
+          // Update goals currentValue
+          goals.forEach(g => {
+            if (g.patientEmail === user.email && g.metricId === body.metricId) {
+              g.currentValue = body.numericValue;
+              if (Number(g.targetValue) === Number(g.currentValue)) {
+                g.status = "ACHIEVED";
+              }
+            }
+          });
+          saveState("mock_goals", goals);
+
+          return readings[index];
         }
-        return await response.text();
-      } catch (error) {
-        console.error(`API Error at ${endpoint}:`, error);
-        throw error;
       }
+
+      // --- ENDPOINT: /readings/patient/{profileId} (GET) ---
+      if (endpoint.startsWith("/readings/patient/")) {
+        const matches = endpoint.match(/\/patient\/([^\/]+)/);
+        const profileId = matches ? matches[1] : null;
+        const connectedPatient = users.find(u => "patient_profile_" + u.id === profileId || String(u.id) === String(profileId?.replace("patient_profile_", "")));
+        if (!connectedPatient) throw new Error("Patient profile not found");
+        return readings.filter(r => r.patientEmail === connectedPatient.email);
+      }
+
+      // --- ENDPOINT: /goals (GET, POST) ---
+      if (endpoint === "/goals") {
+        if (method === "GET") {
+          return goals.filter(g => g.patientEmail === user.email);
+        }
+        if (method === "POST") {
+          const metric = metrics.find(m => m.id === body.metricId);
+          if (!metric) throw new Error("Metric definition not found");
+
+          const recentReading = readings.find(r => r.patientEmail === user.email && r.metricId === body.metricId);
+          const currentValue = recentReading ? recentReading.numericValue : 0;
+
+          const newGoal = {
+            id: Date.now(),
+            metricId: body.metricId,
+            metricName: metric.name,
+            metricUnit: metric.unit,
+            targetValue: Number(body.targetValue),
+            currentValue: currentValue,
+            targetDate: body.targetDate,
+            status: Number(body.targetValue) === currentValue ? "ACHIEVED" : "IN_PROGRESS",
+            patientEmail: user.email
+          };
+
+          goals.push(newGoal);
+          saveState("mock_goals", goals);
+          return newGoal;
+        }
+      }
+
+      // --- ENDPOINT: /goals/{id} (PUT, DELETE) ---
+      if (endpoint.startsWith("/goals/")) {
+        const id = extractIdFromPath(endpoint);
+        const index = goals.findIndex(g => String(g.id) === String(id));
+        if (index === -1) throw new Error("Goal not found");
+
+        if (method === "DELETE") {
+          goals.splice(index, 1);
+          saveState("mock_goals", goals);
+          return "Goal deleted successfully";
+        }
+
+        if (method === "PUT") {
+          const metric = metrics.find(m => m.id === body.metricId);
+          if (!metric) throw new Error("Metric standard not found");
+
+          goals[index] = {
+            ...goals[index],
+            metricId: body.metricId,
+            metricName: metric.name,
+            metricUnit: metric.unit,
+            targetValue: Number(body.targetValue),
+            targetDate: body.targetDate,
+            status: Number(body.targetValue) === goals[index].currentValue ? "ACHIEVED" : "IN_PROGRESS"
+          };
+
+          saveState("mock_goals", goals);
+          return goals[index];
+        }
+      }
+
+      // --- ENDPOINT: /grants (GET) ---
+      if (endpoint === "/grants" && method === "GET") {
+        if (user.role === "INDIVIDUAL") {
+          return grants.filter(g => g.patientEmail === user.email);
+        }
+        if (user.role === "PRACTITIONER") {
+          return grants.filter(g => g.practitionerEmail === user.email);
+        }
+        return grants;
+      }
+
+      // --- ENDPOINT: /grants/request (POST) ---
+      if (endpoint === "/grants/request" && method === "POST") {
+        const patientEmail = typeof body === "string" ? body : body.patientEmail;
+        const patient = users.find(u => u.email === patientEmail && u.role === "INDIVIDUAL");
+        
+        if (!patient) {
+          throw new Error("Patient account not found with the provided email address.");
+        }
+
+        const exists = grants.find(g => g.patientEmail === patientEmail && g.practitionerEmail === user.email);
+        if (exists) {
+          if (exists.status === "ACTIVE") {
+            throw new Error("You already have an active connection with this patient.");
+          }
+          if (exists.status === "REQUESTED") {
+            throw new Error("An access request is already pending approval from this patient.");
+          }
+          exists.status = "REQUESTED";
+          exists.grantedAt = null;
+        } else {
+          grants.push({
+            id: Date.now(),
+            patientEmail: patientEmail,
+            patientName: patient.fullName || patient.email,
+            patientProfileId: "patient_profile_" + patient.id,
+            practitionerEmail: user.email,
+            practitionerName: user.fullName || user.email,
+            status: "REQUESTED",
+            clinicalNote: "",
+            grantedAt: null
+          });
+        }
+        saveState("mock_grants", grants);
+        return "Access requested successfully";
+      }
+
+      // --- ENDPOINT: /grants/{id}/approve (PUT) ---
+      if (endpoint.startsWith("/grants/") && endpoint.endsWith("/approve")) {
+        const id = extractIdFromPath(endpoint);
+        const grant = grants.find(g => String(g.id) === String(id));
+        if (!grant) throw new Error("Grant access record not found");
+
+        grant.status = body.status;
+        grant.grantedAt = body.status === "ACTIVE" ? new Date().toISOString() : grant.grantedAt;
+
+        saveState("mock_grants", grants);
+        return grant;
+      }
+
+      // --- ENDPOINT: /grants/{id}/note (PUT) ---
+      if (endpoint.startsWith("/grants/") && endpoint.endsWith("/note")) {
+        const id = extractIdFromPath(endpoint);
+        const grant = grants.find(g => String(g.id) === String(id));
+        if (!grant) throw new Error("Grant access record not found");
+
+        grant.clinicalNote = typeof body === "string" ? body : body.note;
+        saveState("mock_grants", grants);
+        return grant;
+      }
+
+      // --- ENDPOINT: /grants/{id} (DELETE) ---
+      if (endpoint.startsWith("/grants/") && method === "DELETE") {
+        const id = extractIdFromPath(endpoint);
+        const index = grants.findIndex(g => String(g.id) === String(id));
+        if (index === -1) throw new Error("Grant not found");
+
+        grants.splice(index, 1);
+        saveState("mock_grants", grants);
+        return "Grant connection deleted";
+      }
+
+      // --- ENDPOINT: /admin/users (GET) ---
+      if (endpoint === "/admin/users" && method === "GET") {
+        if (user.role !== "ADMIN") throw new Error("Forbidden");
+        return users;
+      }
+
+      // --- ENDPOINT: /admin/users/{id}/toggle-status (PUT) ---
+      if (endpoint.startsWith("/admin/users/") && endpoint.endsWith("/toggle-status")) {
+        if (user.role !== "ADMIN") throw new Error("Forbidden");
+        const id = extractIdFromPath(endpoint);
+        const foundUser = users.find(u => String(u.id) === String(id));
+        if (!foundUser) throw new Error("User not found");
+
+        foundUser.isActive = !foundUser.isActive;
+        saveState("mock_users", users);
+        return foundUser;
+      }
+
+      // --- ENDPOINT: /admin/metrics (GET) ---
+      if (endpoint === "/admin/metrics" && method === "GET") {
+        if (user.role !== "ADMIN") throw new Error("Forbidden");
+        return metrics;
+      }
+
+      // --- ENDPOINT: /admin/metrics/{id} (PUT, DELETE) ---
+      if (endpoint.startsWith("/admin/metrics/")) {
+        if (user.role !== "ADMIN") throw new Error("Forbidden");
+        const id = extractIdFromPath(endpoint);
+        const index = metrics.findIndex(m => String(m.id) === String(id));
+        if (index === -1) throw new Error("Metric standard not found");
+
+        if (method === "DELETE") {
+          metrics.splice(index, 1);
+          saveState("mock_metrics", metrics);
+          return "Metric standard deleted successfully";
+        }
+
+        if (method === "PUT") {
+          metrics[index] = {
+            ...metrics[index],
+            name: body.name,
+            unit: body.unit,
+            category: body.category
+          };
+          saveState("mock_metrics", metrics);
+          return metrics[index];
+        }
+      }
+
+      throw new Error("Mock API endpoint not found");
     }
 
     // --------------------------------------------------------
