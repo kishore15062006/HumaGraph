@@ -1,9 +1,32 @@
-import React from 'react'
+import React from "react";
 
-const EmptyState = () => {
+const EmptyState = ({
+  message = "No data found.",
+  title = "Nothing here yet",
+  actionLabel,
+  onAction,
+}) => {
   return (
-    <div>EmptyState</div>
-  )
-}
+    <div className="empty-state">
+      <div className="empty-state-icon" aria-hidden="true">
+        <span>⌁</span>
+      </div>
 
-export default EmptyState
+      <h3>{title}</h3>
+
+      <p>{message}</p>
+
+      {actionLabel && onAction && (
+        <button
+          type="button"
+          className="empty-state-action"
+          onClick={onAction}
+        >
+          {actionLabel}
+        </button>
+      )}
+    </div>
+  );
+};
+
+export default EmptyState;
