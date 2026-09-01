@@ -49,11 +49,25 @@ public class PractitionerGrantService {
         dto.setPatientProfileId(
                 grant.getPatientProfile().getId());
 
-        dto.setPractitionerEmail(
-                grant.getPractitionerAccount().getEmail());
+        String practitionerName = null;
+        if (grant.getPractitionerAccount() != null) {
+            Optional<BiometricProfile> practitionerProfile =
+                    profileRepository.findByUserAccountId(grant.getPractitionerAccount().getId());
+            if (practitionerProfile.isPresent() && practitionerProfile.get().getFullName() != null) {
+                practitionerName = practitionerProfile.get().getFullName();
+            } else {
+                practitionerName = grant.getPractitionerAccount().getEmail();
+            }
+            dto.setPractitionerEmail(grant.getPractitionerAccount().getEmail());
+        }
+        dto.setPractitionerName(practitionerName);
 
-        dto.setPatientName(
-                grant.getPatientProfile().getFullName());
+        if (grant.getPatientProfile() != null) {
+            dto.setPatientName(grant.getPatientProfile().getFullName());
+            if (grant.getPatientProfile().getUserAccount() != null) {
+                dto.setPatientEmail(grant.getPatientProfile().getUserAccount().getEmail());
+            }
+        }
 
         dto.setStatus(
                 grant.getStatus().name());
@@ -72,20 +86,34 @@ public class PractitionerGrantService {
             Long practitionerId,
             GrantRequestDto dto) {
 
+        if (dto == null || dto.getPatientEmail() == null || dto.getPatientEmail().trim().isEmpty()) {
+            throw new BusinessValidationException("Patient email is required");
+        }
+
+        String patientEmail = dto.getPatientEmail().trim();
+
         UserAccount practitioner = userRepository
                 .findById(practitionerId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Practitioner not found"));
 
+        if (practitioner.getRole() != UserAccount.UserRole.PRACTITIONER) {
+            throw new BusinessValidationException("Only practitioners can request access");
+        }
+
+        if (practitioner.getEmail().equalsIgnoreCase(patientEmail)) {
+            throw new BusinessValidationException("Cannot request access to yourself");
+        }
+
         UserAccount patient = userRepository
-                .findByEmail(dto.getPatientEmail())
+                .findByEmail(patientEmail)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Patient not found"));
+                        "Patient not found with email: " + patientEmail));
 
         BiometricProfile profile = profileRepository
                 .findByUserAccountId(patient.getId())
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Patient profile not found"));
+                        "Patient biometric profile not found"));
 
         Optional<PractitionerGrant> existing = grantRepository
                 .findByPractitionerAccountIdAndPatientProfileId(
@@ -93,30 +121,30 @@ public class PractitionerGrantService {
                         profile.getId());
 
         if (existing.isPresent()) {
-
             PractitionerGrant grant = existing.get();
 
-            if (grant.getStatus() != PractitionerGrant.GrantStatus.REVOKED) {
-
-                throw new BusinessValidationException(
-                        "Grant already requested or active");
+            if (grant.getStatus() == PractitionerGrant.GrantStatus.ACTIVE) {
+                throw new BusinessValidationException("Access grant is already active");
             }
 
-            grantRepository.delete(grant);
-            grantRepository.flush();
+            if (grant.getStatus() == PractitionerGrant.GrantStatus.REQUESTED) {
+                throw new BusinessValidationException("Access request is already pending approval");
+            }
+
+            // Re-activate a previously REVOKED grant
+            grant.setStatus(PractitionerGrant.GrantStatus.REQUESTED);
+            grant.setGrantedAt(null);
+            grant.setClinicalNote(null);
+            grant = grantRepository.save(grant);
+            return mapToDto(grant);
         }
 
         PractitionerGrant grant = new PractitionerGrant();
 
         grant.setPractitionerAccount(practitioner);
-
         grant.setPatientProfile(profile);
-
-        grant.setStatus(
-                PractitionerGrant.GrantStatus.REQUESTED);
-
+        grant.setStatus(PractitionerGrant.GrantStatus.REQUESTED);
         grant.setGrantedAt(null);
-
         grant.setClinicalNote(null);
 
         grant = grantRepository.save(grant);
@@ -130,6 +158,10 @@ public class PractitionerGrantService {
             Long grantId,
             String newStatus) {
 
+        if (newStatus == null || newStatus.trim().isEmpty()) {
+            throw new BusinessValidationException("Status is required");
+        }
+
         PractitionerGrant grant = grantRepository
                 .findById(grantId)
                 .orElseThrow(() -> new ResourceNotFoundException("Grant not found"));
@@ -142,7 +174,12 @@ public class PractitionerGrantService {
             throw new BusinessValidationException("Unauthorized action");
         }
 
-        PractitionerGrant.GrantStatus status = PractitionerGrant.GrantStatus.valueOf(newStatus.toUpperCase());
+        PractitionerGrant.GrantStatus status;
+        try {
+            status = PractitionerGrant.GrantStatus.valueOf(newStatus.trim().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new BusinessValidationException("Invalid status: " + newStatus);
+        }
 
         grant.setStatus(status);
 
@@ -183,6 +220,23 @@ public class PractitionerGrantService {
         PractitionerGrant grant = grantRepository
                 .findById(grantId)
                 .orElseThrow(() -> new ResourceNotFoundException("Grant not found"));
+
+        boolean isPractitioner = grant.getPractitionerAccount() != null &&
+                grant.getPractitionerAccount().getId() == userId;
+
+        boolean isPatient = false;
+        if (grant.getPatientProfile() != null && grant.getPatientProfile().getUserAccount() != null) {
+            isPatient = grant.getPatientProfile().getUserAccount().getId() == userId;
+        } else {
+            Optional<BiometricProfile> userProfile = profileRepository.findByUserAccountId(userId);
+            if (userProfile.isPresent() && grant.getPatientProfile() != null) {
+                isPatient = grant.getPatientProfile().getId() == userProfile.get().getId();
+            }
+        }
+
+        if (!isPractitioner && !isPatient) {
+            throw new BusinessValidationException("Unauthorized action");
+        }
 
         grantRepository.delete(grant);
     }

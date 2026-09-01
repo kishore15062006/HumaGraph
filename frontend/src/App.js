@@ -15,6 +15,7 @@ import Register from "./components/Register";
 
 // Dashboards
 import AdminDashboard from "./components/dashboard/AdminDashboard";
+import AdminAnalytics from "./components/dashboard/AdminAnalytics";
 
 // Individual
 import HealthReadingList from "./components/healthReading/HealthReadingList";
@@ -22,6 +23,8 @@ import HealthGoalList from "./components/healthGoal/HealthGoalList";
 
 // Practitioner
 import PractitionerGrantList from "./components/practitionerGrant/PractitionerGrantList";
+import PractitionerReadings from "./components/practitionerGrant/PractitionerReadings";
+import PractitionerNotes from "./components/practitionerGrant/PractitionerNotes";
 
 // Styles
 import "./App.css";
@@ -257,7 +260,7 @@ function App() {
         />
 
         {/* ====================================================
-            INDIVIDUAL - HEALTH READINGS
+            HEALTH READINGS (INDIVIDUAL)
         ==================================================== */}
 
         <Route
@@ -269,8 +272,17 @@ function App() {
           }
         />
 
+        <Route
+          path="/readings"
+          element={
+            <RoleRoute allowedRoles={["INDIVIDUAL"]}>
+              <HealthReadingList />
+            </RoleRoute>
+          }
+        />
+
         {/* ====================================================
-            INDIVIDUAL - HEALTH GOALS
+            HEALTH GOALS (INDIVIDUAL)
         ==================================================== */}
 
         <Route
@@ -282,9 +294,27 @@ function App() {
           }
         />
 
+        <Route
+          path="/goals"
+          element={
+            <RoleRoute allowedRoles={["INDIVIDUAL"]}>
+              <HealthGoalList />
+            </RoleRoute>
+          }
+        />
+
         {/* ====================================================
-            INDIVIDUAL - PRACTITIONER GRANTS
+            PRACTITIONER GRANTS & ACCESS
         ==================================================== */}
+
+        <Route
+          path="/grants"
+          element={
+            <RoleRoute allowedRoles={["INDIVIDUAL", "PRACTITIONER"]}>
+              <PractitionerGrantList />
+            </RoleRoute>
+          }
+        />
 
         <Route
           path="/practitioner-grants"
@@ -294,10 +324,6 @@ function App() {
             </RoleRoute>
           }
         />
-
-        {/* ====================================================
-            PRACTITIONER - GRANTS
-        ==================================================== */}
 
         <Route
           path="/practitioner/grants"
@@ -335,11 +361,29 @@ function App() {
         />
 
         {/* ====================================================
-            ADMIN
+            ADMIN - ANALYTICS & ROSTER
         ==================================================== */}
 
         <Route
           path="/admin"
+          element={
+            <RoleRoute allowedRoles={["ADMIN"]}>
+              <AdminAnalytics />
+            </RoleRoute>
+          }
+        />
+
+        <Route
+          path="/admin/analytics"
+          element={
+            <RoleRoute allowedRoles={["ADMIN"]}>
+              <AdminAnalytics />
+            </RoleRoute>
+          }
+        />
+
+        <Route
+          path="/admin/roster"
           element={
             <RoleRoute allowedRoles={["ADMIN"]}>
               <AdminDashboard />
@@ -356,64 +400,5 @@ function App() {
     </BrowserRouter>
   );
 }
-
-// ============================================================
-// TEMPORARY PRACTITIONER READINGS PAGE
-// ============================================================
-
-const PractitionerReadings = () => {
-  return (
-    <main className="dashboard-page">
-      <section className="dashboard-hero">
-        <div>
-          <p className="hero-eyebrow">PATIENT HEALTH DATA</p>
-
-          <h1>Patient Readings</h1>
-
-          <p className="hero-subtitle">
-            Review health readings shared by your patients.
-          </p>
-        </div>
-      </section>
-
-      <section className="dashboard-card">
-        <h2>Patient readings</h2>
-
-        <p>
-          Select a patient from your authorized patient list to view their
-          health readings.
-        </p>
-      </section>
-    </main>
-  );
-};
-
-// ============================================================
-// TEMPORARY PRACTITIONER NOTES PAGE
-// ============================================================
-
-const PractitionerNotes = () => {
-  return (
-    <main className="dashboard-page">
-      <section className="dashboard-hero">
-        <div>
-          <p className="hero-eyebrow">CLINICAL MANAGEMENT</p>
-
-          <h1>Clinical Notes</h1>
-
-          <p className="hero-subtitle">
-            Manage clinical notes for authorized patients.
-          </p>
-        </div>
-      </section>
-
-      <section className="dashboard-card">
-        <h2>Clinical Notes</h2>
-
-        <p>Patient-specific clinical notes will appear here.</p>
-      </section>
-    </main>
-  );
-};
 
 export default App;

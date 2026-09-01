@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 
-import practitionerGrantService from "../../services/practitionerGrantService";
-import { fetchGrants } from "../../store/slices/practitionerGrantSlice";
+import { requestAccess, fetchGrants } from "../../store/slices/practitionerGrantSlice";
 
 import "../../styles/PractitionerGrantForm.css";
 
@@ -11,26 +10,38 @@ const PractitionerGrantForm = ({ onClose }) => {
 
   const [patientEmail, setPatientEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setErrorMessage("");
 
-    if (!patientEmail.trim()) {
+    const trimmedEmail = patientEmail.trim();
+    if (!trimmedEmail) {
+      setErrorMessage("Please enter a valid patient email address.");
       return;
     }
 
     try {
       setLoading(true);
 
-      await practitionerGrantService.requestAccess(patientEmail.trim());
+      const resultAction = await dispatch(
+        requestAccess({ patientEmail: trimmedEmail })
+      );
 
-      dispatch(fetchGrants());
-
-      onClose();
+      if (requestAccess.fulfilled.match(resultAction)) {
+        dispatch(fetchGrants());
+        onClose();
+      } else if (requestActionIsRejected(resultAction)) {
+        setErrorMessage(
+          resultAction.payload ||
+            resultAction.error?.message ||
+            "Failed to send access request."
+        );
+      }
     } catch (error) {
       console.error("Failed to send access request:", error);
-
-      alert(
+      setErrorMessage(
         error?.response?.data?.error ||
           error?.message ||
           "Failed to send access request"
@@ -38,6 +49,10 @@ const PractitionerGrantForm = ({ onClose }) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const requestActionIsRejected = (action) => {
+    return requestAccess.rejected.match(action);
   };
 
   return (
@@ -65,6 +80,24 @@ const PractitionerGrantForm = ({ onClose }) => {
         </div>
 
         <form className="grant-form" onSubmit={handleSubmit}>
+          {errorMessage && (
+            <div
+              className="grant-form-error-banner"
+              style={{
+                color: "#f87171",
+                backgroundColor: "rgba(239, 68, 68, 0.12)",
+                border: "1px solid rgba(239, 68, 68, 0.25)",
+                borderRadius: "8px",
+                padding: "0.75rem 1rem",
+                fontSize: "0.875rem",
+                marginBottom: "1rem",
+                lineHeight: "1.4",
+              }}
+            >
+              {errorMessage}
+            </div>
+          )}
+
           <div className="form-group">
             <label htmlFor="patientEmail">Patient Email</label>
 

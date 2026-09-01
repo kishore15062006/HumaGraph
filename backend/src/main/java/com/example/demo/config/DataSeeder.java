@@ -50,26 +50,22 @@ public class DataSeeder implements CommandLineRunner {
             saveMetric(
                     "Heart Rate",
                     "bpm",
-                    HealthMetric.MetricCategory.CARDIO
-            );
+                    HealthMetric.MetricCategory.CARDIO);
 
             saveMetric(
                     "Blood Pressure",
                     "mmHg",
-                    HealthMetric.MetricCategory.CARDIO
-            );
+                    HealthMetric.MetricCategory.CARDIO);
 
             saveMetric(
                     "Blood Glucose",
                     "mg/dL",
-                    HealthMetric.MetricCategory.METABOLIC
-            );
+                    HealthMetric.MetricCategory.METABOLIC);
 
             saveMetric(
                     "Weight",
                     "kg",
-                    HealthMetric.MetricCategory.FITNESS
-            );
+                    HealthMetric.MetricCategory.FITNESS);
 
         }
 
@@ -103,8 +99,7 @@ public class DataSeeder implements CommandLineRunner {
             admin.setEmail("admin@humagraph.com");
 
             admin.setPasswordHash(
-                    passwordEncoder.encode("admin123")
-            );
+                    passwordEncoder.encode("admin123"));
 
             admin.setRole(UserAccount.UserRole.ADMIN);
 
@@ -121,8 +116,7 @@ public class DataSeeder implements CommandLineRunner {
             profile.setFullName("System Administrator");
 
             profile.setDateOfBirth(
-                    LocalDate.of(1980, 1, 1)
-            );
+                    LocalDate.of(1980, 1, 1));
 
             profile.setGender("Male");
 

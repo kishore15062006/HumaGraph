@@ -8,8 +8,9 @@ const practitionerGrantService = {
     },
 
     // POST /grants/request
-    requestAccess: async (dto) => {
-        const response = await api.post("/grants/request", dto);
+    requestAccess: async (data) => {
+        const payload = typeof data === "string" ? { patientEmail: data } : data;
+        const response = await api.post("/grants/request", payload);
         return response.data;
     },
 

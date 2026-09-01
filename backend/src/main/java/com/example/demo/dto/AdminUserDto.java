@@ -45,6 +45,10 @@ public class AdminUserDto {
         this.active = active;
     }
 
+    public boolean getActive() {
+        return active;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }

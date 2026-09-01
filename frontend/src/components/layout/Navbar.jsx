@@ -86,12 +86,40 @@ const Navbar = () => {
 
           {/* Practitioner */}
           {role === "PRACTITIONER" && (
-            <Link
-              to="/grants"
-              className={isActive("/grants") ? "nav-link active" : "nav-link"}
-            >
-              Patients
-            </Link>
+            <>
+              <Link
+                to="/practitioner/grants"
+                className={
+                  isActive("/practitioner/grants") || isActive("/grants")
+                    ? "nav-link active"
+                    : "nav-link"
+                }
+              >
+                Patients
+              </Link>
+
+              <Link
+                to="/practitioner/readings"
+                className={
+                  isActive("/practitioner/readings")
+                    ? "nav-link active"
+                    : "nav-link"
+                }
+              >
+                Readings
+              </Link>
+
+              <Link
+                to="/practitioner/notes"
+                className={
+                  isActive("/practitioner/notes")
+                    ? "nav-link active"
+                    : "nav-link"
+                }
+              >
+                Clinical Notes
+              </Link>
+            </>
           )}
 
           {/* Admin */}
@@ -104,7 +132,7 @@ const Navbar = () => {
                   : "nav-link"
               }
             >
-              Admin
+              Analytics
             </Link>
           )}
         </div>

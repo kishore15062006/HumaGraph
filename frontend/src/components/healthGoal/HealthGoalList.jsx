@@ -149,7 +149,12 @@ const HealthGoalList = () => {
                       </td>
 
                       <td className="goal-progress-cell">
-                        <CapacityBar value={progress} />
+                        <CapacityBar
+                          value={progress}
+                          current={goal.currentValue}
+                          capacity={goal.targetValue}
+                          compact={true}
+                        />
 
                         <span className="goal-progress-text">
                           {Math.round(progress)}%

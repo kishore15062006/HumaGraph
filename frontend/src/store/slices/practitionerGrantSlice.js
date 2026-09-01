@@ -71,6 +71,46 @@ export const deleteGrant = createAsyncThunk(
 );
 
 // ========================================
+// REQUEST ACCESS
+// ========================================
+
+export const requestAccess = createAsyncThunk(
+  "practitionerGrants/requestAccess",
+  async (dto, { rejectWithValue }) => {
+    try {
+      return await practitionerGrantService.requestAccess(dto);
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.error ||
+          error.response?.data?.message ||
+          error.message ||
+          "Failed to send access request"
+      );
+    }
+  }
+);
+
+// ========================================
+// UPDATE CLINICAL NOTE
+// ========================================
+
+export const updateClinicalNote = createAsyncThunk(
+  "practitionerGrants/updateClinicalNote",
+  async ({ id, note }, { rejectWithValue }) => {
+    try {
+      return await practitionerGrantService.updateNote(id, note);
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.error ||
+          error.response?.data?.message ||
+          error.message ||
+          "Failed to update clinical note"
+      );
+    }
+  }
+);
+
+// ========================================
 // SLICE
 // ========================================
 
@@ -151,10 +191,62 @@ const practitionerGrantSlice = createSlice({
         state.items = state.items.filter((item) => item.id !== action.payload);
       })
 
-      .addCase(deleteGrant.rejected, (state, action) => {
-        state.loading = false;
+    // ========================================
+    // REQUEST ACCESS
+    // ========================================
 
-        state.error = action.payload || "Failed to delete practitioner grant";
+    builder
+      .addCase(requestAccess.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+
+      .addCase(requestAccess.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+
+        const index = state.items.findIndex(
+          (item) => item.id === action.payload.id
+        );
+
+        if (index !== -1) {
+          state.items[index] = action.payload;
+        } else {
+          state.items.unshift(action.payload);
+        }
+      })
+
+      .addCase(requestAccess.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to send access request";
+      });
+
+    // ========================================
+    // UPDATE CLINICAL NOTE
+    // ========================================
+
+    builder
+      .addCase(updateClinicalNote.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+
+      .addCase(updateClinicalNote.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+
+        const index = state.items.findIndex(
+          (item) => item.id === action.payload.id
+        );
+
+        if (index !== -1) {
+          state.items[index] = action.payload;
+        }
+      })
+
+      .addCase(updateClinicalNote.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to update clinical note";
       });
   },
 });

@@ -74,25 +74,37 @@ const PractitionerGrantList = () => {
     return new Date(grant.grantedAt).toLocaleString();
   };
 
-  const handleApprove = (id) => {
-    dispatch(
-      updateGrantStatus({
-        id,
-        status: "ACTIVE",
-      })
-    );
+  const handleApprove = async (id) => {
+    try {
+      await dispatch(
+        updateGrantStatus({
+          id,
+          status: "ACTIVE",
+        })
+      ).unwrap();
+      dispatch(fetchGrants());
+    } catch (error) {
+      console.error("Failed to approve grant:", error);
+      alert(error || "Failed to approve grant");
+    }
   };
 
-  const handleRevoke = (id) => {
-    dispatch(
-      updateGrantStatus({
-        id,
-        status: "REVOKED",
-      })
-    );
+  const handleRevoke = async (id) => {
+    try {
+      await dispatch(
+        updateGrantStatus({
+          id,
+          status: "REVOKED",
+        })
+      ).unwrap();
+      dispatch(fetchGrants());
+    } catch (error) {
+      console.error("Failed to revoke grant:", error);
+      alert(error || "Failed to revoke grant");
+    }
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     const confirmed = window.confirm(
       "Are you sure you want to remove this access grant?"
     );
@@ -101,7 +113,13 @@ const PractitionerGrantList = () => {
       return;
     }
 
-    dispatch(deleteGrant(id));
+    try {
+      await dispatch(deleteGrant(id)).unwrap();
+      dispatch(fetchGrants());
+    } catch (error) {
+      console.error("Failed to delete grant:", error);
+      alert(error || "Failed to remove access grant");
+    }
   };
 
   const startNoteEdit = (grant) => {
@@ -172,7 +190,7 @@ const PractitionerGrantList = () => {
         return;
       }
 
-      await practitionerGrantService.requestAccess(patientEmail);
+      await practitionerGrantService.requestAccess({ patientEmail });
 
       dispatch(fetchGrants());
     } catch (error) {

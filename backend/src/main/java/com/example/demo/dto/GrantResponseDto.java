@@ -7,8 +7,10 @@ public class GrantResponseDto {
     private Long id;
     private Long practitionerId;
     private Long patientProfileId;
+    private String practitionerName;
     private String practitionerEmail;
     private String patientName;
+    private String patientEmail;
     private String status;
     private LocalDateTime grantedAt;
     private String clinicalNote;
@@ -40,6 +42,14 @@ public class GrantResponseDto {
         this.patientProfileId = patientProfileId;
     }
 
+    public String getPractitionerName() {
+        return practitionerName;
+    }
+
+    public void setPractitionerName(String practitionerName) {
+        this.practitionerName = practitionerName;
+    }
+
     public String getPractitionerEmail() {
         return practitionerEmail;
     }
@@ -54,6 +64,14 @@ public class GrantResponseDto {
 
     public void setPatientName(String patientName) {
         this.patientName = patientName;
+    }
+
+    public String getPatientEmail() {
+        return patientEmail;
+    }
+
+    public void setPatientEmail(String patientEmail) {
+        this.patientEmail = patientEmail;
     }
 
     public String getStatus() {

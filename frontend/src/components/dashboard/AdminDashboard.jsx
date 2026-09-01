@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import api from "../../services/api";
 import StatCards from "./StatCard";
+import AdminAnalytics from "./AdminAnalytics";
 import "./AdminDashboard.css"
 
 const AdminDashboard = () => {
@@ -19,13 +20,17 @@ const AdminDashboard = () => {
     category: "CARDIO",
   });
 
+  const [togglingUserId, setTogglingUserId] = useState(null);
+
   useEffect(() => {
-    fetchDashboardData();
+    fetchDashboardData(true);
   }, []);
 
-  const fetchDashboardData = async () => {
+  const fetchDashboardData = async (isInitial = false) => {
     try {
-      setLoading(true);
+      if (isInitial) {
+        setLoading(true);
+      }
       setError("");
 
       const [usersResponse, metricsResponse] = await Promise.all([
@@ -42,19 +47,42 @@ const AdminDashboard = () => {
         err.response?.data?.error || "Failed to load administration data."
       );
     } finally {
-      setLoading(false);
+      if (isInitial) {
+        setLoading(false);
+      }
     }
   };
 
   const handleToggleStatus = async (userId) => {
     try {
+      setTogglingUserId(userId);
+      setError("");
+
+      // Optimistic in-place update
+      setUsers((prevUsers) =>
+        prevUsers.map((u) => {
+          if (u.id === userId) {
+            const currentActive =
+              u.active !== undefined ? Boolean(u.active) : Boolean(u.isActive);
+            return { ...u, active: !currentActive, isActive: !currentActive };
+          }
+          return u;
+        })
+      );
+
       await api.put(`/admin/users/${userId}/toggle-status`);
 
-      await fetchDashboardData();
+      // Silently sync latest user list from server
+      const usersResponse = await api.get("/admin/users");
+      setUsers(usersResponse.data);
     } catch (err) {
       console.error("Failed to toggle user status:", err);
 
       setError(err.response?.data?.error || "Failed to update user status.");
+      // Rollback/refresh from server
+      fetchDashboardData(false);
+    } finally {
+      setTogglingUserId(null);
     }
   };
 
@@ -167,6 +195,29 @@ const AdminDashboard = () => {
             system.
           </p>
         </div>
+        <br/>
+        <div>
+          <button
+            type="button"
+            className="primary-button"
+            onClick={() => setActiveTab("analytics")}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "8px",
+              background: "#10b981",
+              color: "#ffffff",
+              fontWeight: "700",
+              padding: "12px 20px",
+              borderRadius: "12px",
+              border: "none",
+              cursor: "pointer",
+              boxShadow: "0 4px 15px rgba(16, 185, 129, 0.35)",
+            }}
+          >
+            📊 View Platform Analytics
+          </button>
+        </div>
       </section>
 
       {error && <div className="error-message">{error}</div>}
@@ -180,7 +231,7 @@ const AdminDashboard = () => {
             className={activeTab === "users" ? "admin-tab active" : "admin-tab"}
             onClick={() => setActiveTab("users")}
           >
-            User Roster
+            👥 User Roster
           </button>
 
           <button
@@ -190,9 +241,15 @@ const AdminDashboard = () => {
             }
             onClick={() => setActiveTab("metrics")}
           >
-            Biometric Standards
+            🧬 Biometric Standards
           </button>
         </div>
+
+        {activeTab === "analytics" && (
+          <section className="admin-section" style={{ padding: 0, background: "transparent", border: "none", boxShadow: "none" }}>
+            <AdminAnalytics isEmbedded={true} />
+          </section>
+        )}
 
         {activeTab === "users" && (
           <section className="admin-section">
@@ -222,43 +279,60 @@ const AdminDashboard = () => {
                       </td>
                     </tr>
                   ) : (
-                    users.map((user) => (
-                      <tr key={user.id}>
-                        <td>
-                          <div className="user-email">{user.email}</div>
-                        </td>
+                    users.map((user) => {
+                      const isUserActive =
+                        user.active !== undefined
+                          ? Boolean(user.active)
+                          : Boolean(user.isActive);
+                      const isAdmin = user.role === "ADMIN";
 
-                        <td>
-                          <span className="role-badge">{user.role}</span>
-                        </td>
+                      return (
+                        <tr key={user.id}>
+                          <td>
+                            <div className="user-email">{user.email}</div>
+                          </td>
 
-                        <td>
-                          <span
-                            className={
-                              user.isActive
-                                ? "status-badge status-active"
-                                : "status-badge status-inactive"
-                            }
-                          >
-                            {user.isActive ? "Active" : "Deactivated"}
-                          </span>
-                        </td>
+                          <td>
+                            <span className="role-badge">{user.role}</span>
+                          </td>
 
-                        <td>
-                          <button
-                            type="button"
-                            className={
-                              user.isActive
-                                ? "table-action danger"
-                                : "table-action"
-                            }
-                            onClick={() => handleToggleStatus(user.id)}
-                          >
-                            {user.isActive ? "Deactivate" : "Activate"}
-                          </button>
-                        </td>
-                      </tr>
-                    ))
+                          <td>
+                            <span
+                              className={
+                                isUserActive
+                                  ? "status-badge status-active"
+                                  : "status-badge status-inactive"
+                              }
+                            >
+                              {isUserActive ? "Active" : "Deactivated"}
+                            </span>
+                          </td>
+
+                          <td>
+                            {isAdmin ? (
+                              <span className="protected-badge">Protected</span>
+                            ) : (
+                              <button
+                                type="button"
+                                disabled={togglingUserId === user.id}
+                                className={
+                                  isUserActive
+                                    ? "table-action danger"
+                                    : "table-action"
+                                }
+                                onClick={() => handleToggleStatus(user.id)}
+                              >
+                                {togglingUserId === user.id
+                                  ? "Updating..."
+                                  : isUserActive
+                                  ? "Deactivate"
+                                  : "Activate"}
+                              </button>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })
                   )}
                 </tbody>
               </table>
